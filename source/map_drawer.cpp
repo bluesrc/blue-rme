@@ -155,12 +155,8 @@ void MapDrawer::SetupVars()
 	tile_size = int(bluerme::TileSize / zoom); // after zoom
 	floor = canvas->GetFloor();
 
-	if(options.show_all_floors) {
-		if(floor < 8)
-			start_z = bluerme::MapGroundLayer;
-		else
-			start_z = std::min(bluerme::MapMaxLayer, floor + 2);
-	}
+	if(options.show_all_floors)
+		start_z = bluerme::MapMaxLayer;
 	else
 		start_z = floor;
 

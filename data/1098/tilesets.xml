@@ -197,6 +197,7 @@
 			<brush name="frozen mud"/>
 			<brush name="frozen mud (thick border)"/>
 			<item id="3311"/>
+			<brush name="transparent water"/>
 		</terrain>
 		<doodad>
 			<brush name="mossy wall"/>
@@ -294,6 +295,8 @@
 
 			<brush name="demon oak"/>
 			<item fromid="8289" toid="8290"/>
+
+			<brush name="transparent waterfall"/>
 		</doodad>
 		<raw>
 			<item fromid="386" toid="391"/>

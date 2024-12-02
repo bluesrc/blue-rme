@@ -820,6 +820,22 @@
 		</alternate>
 	</brush>
 
+	<brush name="transparent waterfall" type="doodad" server_lookid="26382" draggable="true" on_blocking="true" thickness="100/100">
+		<alternate>
+			<composite chance="10">
+				<tile x="0" y="0" z="0">  <item id="26382" chance="10"/> </tile>
+				<tile x="0" y="1" z="0">  <item id="26386" chance="10"/> </tile>
+				<tile x="0" y="0" z="-1"> <item id="26384" chance="10"/> </tile>
+			</composite>
+		</alternate>
+		<alternate>
+			<composite chance="10">
+				<tile x="0" y="0" z="0">  <item id="26383" chance="10"/> </tile>
+				<tile x="1" y="0" z="0">  <item id="26387" chance="10"/> </tile>
+				<tile x="0" y="0" z="-1"> <item id="26385" chance="10"/> </tile>
+			</composite>
+		</alternate>
+	</brush>
 	<!-- Jungle -->
 
 	<brush name="bamboo plant" type="doodad" server_lookid="4025" draggable="true" on_blocking="true" thickness="12/100">
