@@ -159,6 +159,23 @@
 		<border align="inner" to="ice" id="48"/>
 	</brush>
 
+	<brush name="transparent water" type="ground" server_lookid="26388" z-order="6000">
+		<item id="26388" chance="3"/>
+		<item id="26389" chance="3"/>
+		<item id="26390" chance="3"/>
+		<item id="26391" chance="3"/>
+		<item id="26392" chance="3"/>
+		<item id="26393" chance="3"/>
+		<item id="26394" chance="3"/>
+		<item id="26395" chance="3"/>
+		<item id="26396" chance="3"/>
+		<item id="26397" chance="3"/>
+		<item id="26398" chance="3"/>
+		<item id="26399" chance="3"/>
+
+		<border align="outer" id="227"/>
+	</brush>
+
 	<brush name="ice" type="ground" server_lookid="671" z-order="5500">
 		<item id="671" chance="2"/>
 		<item id="6683" chance="1"/>
@@ -733,6 +750,7 @@
 		<item id="8322" chance="0"/>
 
 		<border align="outer" id="16"/>
+		<border align="inner" to="transparent water" id="226"/>
 		<border align="inner" to="sea" ground_equivalent="231">
 			<borderitem edge="n"   item="4632"/>
 			<borderitem edge="e"   item="4635"/>

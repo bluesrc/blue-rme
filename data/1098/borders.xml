@@ -2215,4 +2215,49 @@
 		<borderitem edge="dsw" item="12181"/>
 		<borderitem edge="dse" item="12180"/>
 	</border>
+
+	<border id="226"> <!-- sand transparent water  -->
+		<borderitem edge="n"   item="26400"/>
+		<borderitem edge="e"   item="26403"/>
+		<borderitem edge="s"   item="26402"/>
+		<borderitem edge="w"   item="26401"/>
+		<borderitem edge="cnw" item="26411"/>
+		<borderitem edge="cne" item="26410"/>
+		<borderitem edge="csw" item="26409"/>
+		<borderitem edge="cse" item="26408"/>
+		<borderitem edge="dnw" item="26407"/>
+		<borderitem edge="dne" item="26406"/>
+		<borderitem edge="dsw" item="26405"/>
+		<borderitem edge="dse" item="26404"/>
+	</border>
+
+	<border id="227"> <!-- ground transparent water  -->
+		<borderitem edge="n"   item="26412"/>
+		<borderitem edge="e"   item="26413"/>
+		<borderitem edge="s"   item="26414"/>
+		<borderitem edge="w"   item="26415"/>
+		<borderitem edge="cnw" item="26420"/>
+		<borderitem edge="cne" item="26421"/>
+		<borderitem edge="csw" item="26422"/>
+		<borderitem edge="cse" item="26423"/>
+		<borderitem edge="dnw" item="26416"/>
+		<borderitem edge="dne" item="26417"/>
+		<borderitem edge="dsw" item="26418"/>
+		<borderitem edge="dse" item="26419"/>
+	</border>
+
+	<border id="228"> <!-- transparent water  -->
+		<borderitem edge="n"   item="26447"/>
+		<borderitem edge="e"   item="26448"/>
+		<borderitem edge="s"   item="26449"/>
+		<borderitem edge="w"   item="26450"/>
+		<borderitem edge="cnw" item="26455"/>
+		<borderitem edge="cne" item="26456"/>
+		<borderitem edge="csw" item="26457"/>
+		<borderitem edge="cse" item="26458"/>
+		<borderitem edge="dnw" item="26451"/>
+		<borderitem edge="dne" item="26452"/>
+		<borderitem edge="dsw" item="26453"/>
+		<borderitem edge="dse" item="26452"/>
+	</border>
 </materials>
