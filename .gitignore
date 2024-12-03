@@ -33,6 +33,7 @@ data/user
 *.db
 *.opendb
 
+vcproj/.vs/
 vcproj/ipch/
 vcproj/Beta Release/
 vcproj/Debug/
