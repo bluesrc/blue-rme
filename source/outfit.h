@@ -15,12 +15,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_OUTFIT_H_
-#define BLUERME_OUTFIT_H_
+#ifndef RME_OUTFIT_H_
+#define RME_OUTFIT_H_
 
 struct Outfit {
-	Outfit() : lookType(0), lookItem(0), lookMount(0), lookAddon(0), lookHead(0), lookBody(0), lookLegs(0), lookFeet(0) {}
-	~Outfit() {}
+	Outfit() :
+		lookType(0), lookItem(0), lookMount(0), lookAddon(0), lookHead(0), lookBody(0), lookLegs(0), lookFeet(0), lookMountHead(0), lookMountBody(0), lookMountLegs(0), lookMountFeet(0) { }
+	~Outfit() { }
 	int lookType;
 	int lookItem;
 	int lookMount;
@@ -29,6 +30,10 @@ struct Outfit {
 	int lookBody;
 	int lookLegs;
 	int lookFeet;
+	int lookMountHead;
+	int lookMountBody;
+	int lookMountLegs;
+	int lookMountFeet;
 
 	uint32_t getColorHash() const {
 		return lookHead << 24 | lookBody << 16 | lookLegs << 8 | lookFeet;

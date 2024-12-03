@@ -32,164 +32,175 @@
 
 Settings g_settings;
 
-Settings::Settings() : store(Config::LAST)
+Settings::Settings() :
+	store(Config::LAST)
 #ifdef __WINDOWS__
-			   , use_file_cfg(false)
+	,
+	use_file_cfg(false)
 #endif
 {
 	setDefaults();
 }
 
-Settings::~Settings()
-{
+Settings::~Settings() {
 	////
 }
 
-wxConfigBase& Settings::getConfigObject()
-{
+wxConfigBase& Settings::getConfigObject() {
 	return *dynamic_cast<wxConfigBase*>(wxConfig::Get());
 }
 
-bool Settings::getBoolean(uint32_t key) const
-{
-	if(key > Config::LAST) {
+bool Settings::getBoolean(uint32_t key) const {
+	if (key > Config::LAST) {
 		return false;
 	}
 
 	const DynamicValue& dv = store[key];
-	if(dv.type == TYPE_INT) {
+	if (dv.type == TYPE_INT) {
 		return dv.intval != 0;
 	}
 	return false;
 }
 
-int Settings::getInteger(uint32_t key) const
-{
-	if(key > Config::LAST) return 0;
+int Settings::getInteger(uint32_t key) const {
+	if (key > Config::LAST) {
+		return 0;
+	}
 	const DynamicValue& dv = store[key];
-	if(dv.type == TYPE_INT)
+	if (dv.type == TYPE_INT) {
 		return dv.intval;
+	}
 	return 0;
 }
 
-float Settings::getFloat(uint32_t key) const
-{
-	if(key > Config::LAST) return 0.0;
+float Settings::getFloat(uint32_t key) const {
+	if (key > Config::LAST) {
+		return 0.0;
+	}
 	const DynamicValue& dv = store[key];
-	if(dv.type == TYPE_FLOAT) {
+	if (dv.type == TYPE_FLOAT) {
 		return dv.floatval;
 	}
 	return 0.0;
 }
 
-std::string Settings::getString(uint32_t key) const
-{
-	if(key > Config::LAST) return "";
+std::string Settings::getString(uint32_t key) const {
+	if (key > Config::LAST) {
+		return "";
+	}
 	const DynamicValue& dv = store[key];
-	if(dv.type == TYPE_STR && dv.strval != nullptr)
+	if (dv.type == TYPE_STR && dv.strval != nullptr) {
 		return *dv.strval;
+	}
 	return "";
 }
 
-void Settings::setInteger(uint32_t key, int newval)
-{
-	if(key > Config::LAST) return;
+void Settings::setInteger(uint32_t key, int newval) {
+	if (key > Config::LAST) {
+		return;
+	}
 	DynamicValue& dv = store[key];
-	if(dv.type == TYPE_INT) {
+	if (dv.type == TYPE_INT) {
 		dv.intval = newval;
-	} else if(dv.type == TYPE_NONE) {
+	} else if (dv.type == TYPE_NONE) {
 		dv.type = TYPE_INT;
 		dv.intval = newval;
 	}
 }
 
-void Settings::setFloat(uint32_t key, float newval)
-{
-	if(key > Config::LAST) return;
+void Settings::setFloat(uint32_t key, float newval) {
+	if (key > Config::LAST) {
+		return;
+	}
 	DynamicValue& dv = store[key];
-	if(dv.type == TYPE_FLOAT) {
+	if (dv.type == TYPE_FLOAT) {
 		dv.floatval = newval;
-	} else if(dv.type == TYPE_NONE) {
+	} else if (dv.type == TYPE_NONE) {
 		dv.type = TYPE_FLOAT;
 		dv.floatval = newval;
 	}
 }
 
-void Settings::setString(uint32_t key, std::string newval)
-{
-	if(key > Config::LAST) return;
+void Settings::setString(uint32_t key, std::string newval) {
+	if (key > Config::LAST) {
+		return;
+	}
 	DynamicValue& dv = store[key];
-	if(dv.type == TYPE_STR) {
+	if (dv.type == TYPE_STR) {
 		delete dv.strval;
 		dv.strval = newd std::string(newval);
-	} else if(dv.type == TYPE_NONE) {
+	} else if (dv.type == TYPE_NONE) {
 		dv.type = TYPE_STR;
 		dv.strval = newd std::string(newval);
 	}
 }
 
-std::string Settings::DynamicValue::str()
-{
-	switch(type) {
-		case TYPE_FLOAT:return f2s(floatval);
-		case TYPE_STR:  return std::string(*strval);
-		case TYPE_INT:  return i2s(intval);
+std::string Settings::DynamicValue::str() {
+	switch (type) {
+		case TYPE_FLOAT:
+			return f2s(floatval);
+		case TYPE_STR:
+			return std::string(*strval);
+		case TYPE_INT:
+			return i2s(intval);
 		default:
-		case TYPE_NONE: return "";
+		case TYPE_NONE:
+			return "";
 	}
 }
 
-void Settings::IO(IOMode mode)
-{
-	wxConfigBase* conf = (mode == DEFAULT? nullptr : dynamic_cast<wxConfigBase*>(wxConfig::Get()));
+void Settings::IO(IOMode mode) {
+	wxConfigBase* conf = (mode == DEFAULT ? nullptr : dynamic_cast<wxConfigBase*>(wxConfig::Get()));
 
 	using namespace Config;
-#define section(s) if(conf) conf->SetPath("/" s)
-#define Int(key, dflt) \
-	do { \
-		if(mode == DEFAULT) { \
-			setInteger(key, dflt); \
-		} else if(mode == SAVE) { \
-			conf->Write(#key, getInteger(key)); \
-		} else if(mode == LOAD) { \
+#define section(s) \
+	if (conf)      \
+	conf->SetPath("/" s)
+#define Int(key, dflt)                                     \
+	do {                                                   \
+		if (mode == DEFAULT) {                             \
+			setInteger(key, dflt);                         \
+		} else if (mode == SAVE) {                         \
+			conf->Write(#key, getInteger(key));            \
+		} else if (mode == LOAD) {                         \
 			setInteger(key, conf->Read(#key, long(dflt))); \
-		} \
-	} while(false)
-#define IntToSave(key, dflt) \
-	do { \
-		if(mode == DEFAULT) { \
-			setInteger(key, dflt); \
-		} else if(mode == SAVE) { \
-			conf->Write(#key, getInteger(key##_TO_SAVE)); \
-		} else if(mode == LOAD) { \
+		}                                                  \
+	} while (false)
+#define IntToSave(key, dflt)                               \
+	do {                                                   \
+		if (mode == DEFAULT) {                             \
+			setInteger(key, dflt);                         \
+		} else if (mode == SAVE) {                         \
+			conf->Write(#key, getInteger(key##_TO_SAVE));  \
+		} else if (mode == LOAD) {                         \
 			setInteger(key, conf->Read(#key, (long)dflt)); \
-			setInteger(key##_TO_SAVE , getInteger(key)); \
-		} \
-	} while(false)
-#define Float(key, dflt) \
-	do {\
-		if(mode == DEFAULT) { \
-			setFloat(key, dflt); \
-		} else if(mode == SAVE) { \
-			conf->Write(#key, getFloat(key)); \
-		} else if(mode == LOAD) { \
-			double tmp_float;\
+			setInteger(key##_TO_SAVE, getInteger(key));    \
+		}                                                  \
+	} while (false)
+#define Float(key, dflt)                        \
+	do {                                        \
+		if (mode == DEFAULT) {                  \
+			setFloat(key, dflt);                \
+		} else if (mode == SAVE) {              \
+			conf->Write(#key, getFloat(key));   \
+		} else if (mode == LOAD) {              \
+			double tmp_float;                   \
 			conf->Read(#key, &tmp_float, dflt); \
-			setFloat(key, tmp_float); \
-		} \
-	} while(false)
-#define String(key, dflt) \
-	do { \
-		if(mode == DEFAULT) { \
-			setString(key, dflt); \
-		} else if(mode == SAVE) { \
+			setFloat(key, tmp_float);           \
+		}                                       \
+	} while (false)
+#define String(key, dflt)                             \
+	do {                                              \
+		if (mode == DEFAULT) {                        \
+			setString(key, dflt);                     \
+		} else if (mode == SAVE) {                    \
 			conf->Write(#key, wxstr(getString(key))); \
-		} else if(mode == LOAD) { \
-			wxString str; \
-			conf->Read(#key, &str, dflt); \
-			setString(key, nstr(str)); \
-		} \
-	} while(false)
+		} else if (mode == LOAD) {                    \
+			wxString str;                             \
+			conf->Read(#key, &str, dflt);             \
+			setString(key, nstr(str));                \
+		}                                             \
+	} while (false)
 
 	section("View");
 	Int(TRANSPARENT_FLOORS, 0);
@@ -197,13 +208,18 @@ void Settings::IO(IOMode mode)
 	Int(SHOW_ALL_FLOORS, 1);
 	Int(SHOW_INGAME_BOX, 0);
 	Int(SHOW_LIGHTS, 1);
+	Int(SHOW_LIGHT_STR, 1);
+	Int(SHOW_TECHNICAL_ITEMS, 1);
+	Int(SHOW_WAYPOINTS, 1);
 	Int(SHOW_GRID, 0);
 	Int(SHOW_EXTRA, 1);
 	Int(SHOW_SHADE, 1);
 	Int(SHOW_SPECIAL_TILES, 1);
+	Int(SHOW_ZONE_AREAS, 1);
 	Int(SHOW_SPAWNS, 1);
 	Int(SHOW_ITEMS, 1);
 	Int(HIGHLIGHT_ITEMS, 0);
+	Int(HIGHLIGHT_LOCKED_DOORS, 1);
 	Int(SHOW_CREATURES, 1);
 	Int(SHOW_HOUSES, 1);
 	Int(SHOW_BLOCKING, 0);
@@ -212,8 +228,9 @@ void Settings::IO(IOMode mode)
 	Int(SHOW_ONLY_MODIFIED_TILES, 0);
 	Int(SHOW_PREVIEW, 1);
 	Int(SHOW_WALL_HOOKS, 0);
-	Int(SHOW_PICKUPABLES, 0);
-	Int(SHOW_MOVEABLES, 0);
+	Int(SHOW_TOWNS, 0);
+	Int(ALWAYS_SHOW_ZONES, 1);
+	Int(EXT_HOUSE_SHADER, 1);
 
 	section("Version");
 	Int(VERSION_ID, 0);
@@ -257,6 +274,7 @@ void Settings::IO(IOMode mode)
 	Int(DEFAULT_CLIENT_VERSION, CLIENT_VERSION_NONE);
 	Int(RAW_LIKE_SIMONE, 1);
 	Int(ONLY_ONE_INSTANCE, 1);
+	Int(SHOW_TILESET_EDITOR, 0);
 	Int(USE_OTBM_4_FOR_ALL_MAPS, 0);
 	Int(USE_OTGZ, 1);
 	Int(SAVE_WITH_OTB_MAGIC_NUMBER, 0);
@@ -279,6 +297,7 @@ void Settings::IO(IOMode mode)
 	Int(MINIMAP_UPDATE_DELAY, 333);
 	Int(MINIMAP_VIEW_BOX, 1);
 	String(MINIMAP_EXPORT_DIR, "");
+	String(TILESET_EXPORT_DIR, "");
 
 	Int(CURSOR_RED, 0);
 	Int(CURSOR_GREEN, 166);
@@ -293,6 +312,7 @@ void Settings::IO(IOMode mode)
 	Int(USE_LARGE_CONTAINER_ICONS, 1);
 	Int(USE_LARGE_CHOOSE_ITEM_ICONS, 1);
 	Int(USE_LARGE_TERRAIN_TOOLBAR, 1);
+	Int(USE_LARGE_COLLECTION_TOOLBAR, 1);
 	Int(USE_LARGE_DOODAD_SIZEBAR, 1);
 	Int(USE_LARGE_ITEM_SIZEBAR, 1);
 	Int(USE_LARGE_HOUSE_SIZEBAR, 1);
@@ -300,6 +320,7 @@ void Settings::IO(IOMode mode)
 	Int(USE_GUI_SELECTION_SHADOW, 0);
 	Int(PALETTE_COL_COUNT, 8);
 	String(PALETTE_TERRAIN_STYLE, "large icons");
+	String(PALETTE_COLLECTION_STYLE, "large icons");
 	String(PALETTE_DOODAD_STYLE, "large icons");
 	String(PALETTE_ITEM_STYLE, "listbox");
 	String(PALETTE_RAW_STYLE, "listbox");
@@ -308,8 +329,6 @@ void Settings::IO(IOMode mode)
 	String(PALETTE_LAYOUT, "name=02c30f6048629894000011bc00000002;caption=Palette;state=2099148;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=245;besth=100;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=-1;floath=-1");
 	Int(MINIMAP_VISIBLE, 0);
 	String(MINIMAP_LAYOUT, "name=066e2bc8486298990000259a00000003;caption=Minimap;state=2099151;dir=4;layer=0;row=0;pos=0;prop=100000;bestw=170;besth=130;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=221;floath=164");
-	Int(ACTIONS_HISTORY_VISIBLE, 0);
-	String(ACTIONS_HISTORY_LAYOUT, "name=945c6eb52a414f1B817e8befd4479412;caption=Actions;state=2099151;dir=2;layer=0;row=0;pos=0;prop=100000;bestw=170;besth=130;minw=-1;minh=-1;maxw=-1;maxh=-1;floatx=-1;floaty=-1;floatw=221;floath=164");
 	Int(WINDOW_HEIGHT, 500);
 	Int(WINDOW_WIDTH, 700);
 	Int(WINDOW_MAXIMIZED, 0);
@@ -322,11 +341,14 @@ void Settings::IO(IOMode mode)
 	Int(SHOW_TOOLBAR_BRUSHES, 0);
 	Int(SHOW_TOOLBAR_POSITION, 0);
 	Int(SHOW_TOOLBAR_SIZES, 0);
-	Int(SHOW_TOOLBAR_INDICATORS, 0);
 	String(TOOLBAR_STANDARD_LAYOUT, "");
 	String(TOOLBAR_BRUSHES_LAYOUT, "");
 	String(TOOLBAR_POSITION_LAYOUT, "");
 	String(TOOLBAR_SIZES_LAYOUT, "");
+
+	// experimental
+	section("experimental");
+	Int(EXPERIMENTAL_FOG, 0);
 
 	section("");
 	Int(GOTO_WEBSITE_ON_BOOT, 0);
@@ -337,6 +359,9 @@ void Settings::IO(IOMode mode)
 	Int(FIND_ITEM_MODE, 0);
 	Int(JUMP_TO_ITEM_MODE, 0);
 
+	// checkbox in terrain palette
+	Int(DRAW_LOCKED_DOOR, 0);
+
 #undef section
 #undef Int
 #undef IntToSave
@@ -344,29 +369,28 @@ void Settings::IO(IOMode mode)
 #undef String
 }
 
-void Settings::load()
-{
+void Settings::load() {
 	wxConfigBase* conf;
 #ifdef __WINDOWS__
-	FileName filename("bluerme.cfg");
-	if(filename.FileExists()) { // Use local file if it exists
+	FileName filename("editor.cfg");
+	if (filename.FileExists()) { // Use local file if it exists
 		wxFileInputStream file(filename.GetFullPath());
 		conf = newd wxFileConfig(file);
 		use_file_cfg = true;
 		g_settings.setInteger(Config::INDIRECTORY_INSTALLATION, 1);
 	} else { // Use registry
-		conf = newd wxConfig("Remere's Map Editor", "Remere", "", "", wxCONFIG_USE_GLOBAL_FILE);
+		conf = newd wxConfig("Mapeditor", "Blue", "", "", wxCONFIG_USE_GLOBAL_FILE);
 		g_settings.setInteger(Config::INDIRECTORY_INSTALLATION, 0);
 	}
 #else
-	FileName filename("./bluerme.cfg");
-	if(filename.FileExists()) { // Use local file if it exists
+	FileName filename("./editor.cfg");
+	if (filename.FileExists()) { // Use local file if it exists
 		wxFileInputStream file(filename.GetFullPath());
 		conf = newd wxFileConfig(file);
 		g_settings.setInteger(Config::INDIRECTORY_INSTALLATION, 1);
 	} else { // Else use global (user-specific) conf
-		filename.Assign(wxStandardPaths::Get().GetUserConfigDir() + "/.bluerme/bluerme.cfg");
-		if(filename.FileExists()) {
+		filename.Assign(wxStandardPaths::Get().GetUserConfigDir() + "/.rme/editor.cfg");
+		if (filename.FileExists()) {
 			wxFileInputStream file(filename.GetFullPath());
 			conf = newd wxFileConfig(file);
 		} else {
@@ -380,38 +404,38 @@ void Settings::load()
 	IO(LOAD);
 }
 
-void Settings::save(bool endoftheworld)
-{
+void Settings::save(bool endoftheworld) {
 	IO(SAVE);
 #ifdef __WINDOWS__
-	if(use_file_cfg) {
+	if (use_file_cfg) {
 		wxFileConfig* conf = dynamic_cast<wxFileConfig*>(wxConfig::Get());
-		if(!conf)
+		if (!conf) {
 			return;
-		FileName filename("bluerme.cfg");
+		}
+		FileName filename("editor.cfg");
 		wxFileOutputStream file(filename.GetFullPath());
 		conf->Save(file);
 	}
 #else
 	wxFileConfig* conf = dynamic_cast<wxFileConfig*>(wxConfig::Get());
-	if(!conf)
+	if (!conf) {
 		return;
-	FileName filename("./bluerme.cfg");
-	if(filename.FileExists()) { // Use local file if it exists
+	}
+	FileName filename("./editor.cfg");
+	if (filename.FileExists()) { // Use local file if it exists
 		wxFileOutputStream file(filename.GetFullPath());
 		conf->Save(file);
 	} else { // Else use global (user-specific) conf
-		wxString path = wxStandardPaths::Get().GetUserConfigDir() + "/.bluerme/bluerme.cfg";
+		wxString path = wxStandardPaths::Get().GetUserConfigDir() + "/.rme/editor.cfg";
 		filename.Assign(path);
 		filename.Mkdir(0755, wxPATH_MKDIR_FULL);
 		wxFileOutputStream file(filename.GetFullPath());
 		conf->Save(file);
 	}
 #endif
-	if(endoftheworld) {
+	if (endoftheworld) {
 		wxConfigBase* conf = dynamic_cast<wxConfigBase*>(wxConfig::Get());
 		wxConfig::Set(nullptr);
 		delete conf;
 	}
 }
-

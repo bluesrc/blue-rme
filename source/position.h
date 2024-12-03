@@ -23,68 +23,78 @@
 #include <vector>
 #include <list>
 
-class Position
-{
+class SmallPosition;
+
+class Position {
 public:
 	// We use int since it's the native machine type and can be several times faster than
 	// the other integer types in most cases, also, the position may be negative in some
 	// cases
 	int x, y, z;
 
-	Position() : x(0), y(0), z(0) {}
-	Position(int x, int y, int z) : x(x), y(y), z(z) {}
+	Position() :
+		x(0), y(0), z(0) { }
+	Position(int _x, int _y, int _z) :
+		x(_x), y(_y), z(_z) { }
 
-	bool operator<(const Position& other) const noexcept {
-		if(z < other.z)
+	bool operator<(const Position& p) const {
+		if (z < p.z) {
 			return true;
-		if(z > other.z)
+		}
+		if (z > p.z) {
 			return false;
+		}
 
-		if(y < other.y)
+		if (y < p.y) {
 			return true;
-		if(y > other.y)
+		}
+		if (y > p.y) {
 			return false;
+		}
 
-		if(x < other.x)
+		if (x < p.x) {
 			return true;
-		//if(x > p.x)
+		}
+		// if(x > p.x)
 		//	return false;
 
 		return false;
 	}
 
-	bool operator>(const Position& other) const noexcept {
-		return !(*this < other);
+	bool operator>(const Position& p) const {
+		return !(*this < p);
 	}
 
-	Position operator-(const Position& other) const noexcept {
-		return Position(x - other.x, y - other.y, z - other.z);
+	Position operator-(const Position& p) const {
+		Position newpos;
+		newpos.x = x - p.x;
+		newpos.y = y - p.y;
+		newpos.z = z - p.z;
+		return newpos;
 	}
 
-	Position operator+(const Position& other) const noexcept {
-		return Position(x + other.x, y + other.y, z + other.z);
+	Position operator+(const Position& p) const {
+		Position newpos;
+		newpos.x = x + p.x;
+		newpos.y = y + p.y;
+		newpos.z = z + p.z;
+		return newpos;
 	}
 
-	Position& operator+=(const Position& other) {
-		*this = *this + other;
+	Position& operator+=(const Position& p) {
+		*this = *this + p;
 		return *this;
 	}
 
-	bool operator==(const Position& other) const noexcept {
-		return other.z == z && other.x == x && other.y == y;
+	bool operator==(const Position& p) const {
+		return p.x == x && p.y == y && p.z == z;
 	}
 
-	bool operator!=(const Position& other) const noexcept {
-		return !(*this == other);
+	bool operator!=(const Position& p) const {
+		return !(*this == p);
 	}
 
-	bool isValid() const noexcept {
-		if(x == 0 && y == 0 && z == 0)
-			return false;
-		return (z >= bluerme::MapMinLayer && z <= bluerme::MapMaxLayer)
-			&& (x >= 0 && x <= bluerme::MapMaxWidth)
-			&& (y >= 0 && y <= bluerme::MapMaxHeight);
-	}
+	bool isValid() const;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Position& pos) {
@@ -96,21 +106,35 @@ inline std::istream& operator>>(std::istream& is, Position& pos) {
 	char a, b;
 	int x, y, z;
 	is >> x;
-	if(!is) return is;
+	if (!is) {
+		return is;
+	}
 	is >> a;
-	if(!is || a != ':') return is;
+	if (!is || a != ':') {
+		return is;
+	}
 	is >> y;
-	if(!is) return is;
+	if (!is) {
+		return is;
+	}
 	is >> b;
-	if(!is || b != ':') return is;
+	if (!is || b != ':') {
+		return is;
+	}
 	is >> z;
-	if(!is) return is;
+	if (!is) {
+		return is;
+	}
 
 	pos.x = x;
 	pos.y = y;
 	pos.z = z;
 
 	return is;
+}
+
+inline bool Position::isValid() const {
+	return x >= 0 && x <= MAP_MAX_WIDTH && y >= 0 && y <= MAP_MAX_HEIGHT && z >= 0 && z <= MAP_MAX_LAYER;
 }
 
 inline Position abs(const Position& position) {

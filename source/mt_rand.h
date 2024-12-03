@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MT_RAND_H_
-#define BLUERME_MT_RAND_H_
+#ifndef RME_MT_RAND_H_
+#define RME_MT_RAND_H_
 
 void mt_seed(unsigned long s);
 unsigned long mt_randi();

@@ -15,13 +15,15 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_ITEM_ATTRIBUTES_H_
-#define BLUERME_ITEM_ATTRIBUTES_H_
+#ifndef RME_ITEM_ATTRIBUTES_H_
+#define RME_ITEM_ATTRIBUTES_H_
 
 #include <string>
 #include <map>
 
 #include "filehandle.h"
+
+#include <boost/static_assert.hpp>
 
 class IOMap;
 class ItemAttribute;
@@ -29,8 +31,7 @@ class ItemAttribute;
 class PropWriteStream;
 class PropStream;
 
-class ItemAttribute
-{
+class ItemAttribute {
 public:
 	ItemAttribute();
 	ItemAttribute(const std::string& str);
@@ -71,11 +72,10 @@ private:
 
 typedef std::map<std::string, ItemAttribute> ItemAttributeMap;
 
-class ItemAttributes
-{
+class ItemAttributes {
 public:
 	ItemAttributes();
-	ItemAttributes(const ItemAttributes &i);
+	ItemAttributes(const ItemAttributes& i);
 	virtual ~ItemAttributes();
 
 	// Save / load

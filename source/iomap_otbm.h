@@ -15,16 +15,15 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_OTBM_MAP_IO_H_
-#define BLUERME_OTBM_MAP_IO_H_
+#ifndef RME_OTBM_MAP_IO_H_
+#define RME_OTBM_MAP_IO_H_
 
 #include "iomap.h"
 
 // Pragma pack is VERY important since otherwise it won't be able to load the structs correctly
 #pragma pack(1)
 
-enum OTBM_ItemAttribute
-{
+enum OTBM_ItemAttribute {
 	OTBM_ATTR_DESCRIPTION = 1,
 	OTBM_ATTR_EXT_FILE = 2,
 	OTBM_ATTR_TILE_FLAGS = 3,
@@ -48,11 +47,15 @@ enum OTBM_ItemAttribute
 	OTBM_ATTR_SLEEPSTART = 21,
 	OTBM_ATTR_CHARGES = 22,
 
+	// Canary RME (parse without loading only)
+	OTBM_ATTR_EXT_SPAWN_NPC_FILE = 23,
+
+	OTBM_ATTR_PODIUMOUTFIT = 40,
+	OTBM_ATTR_TIER = 41,
 	OTBM_ATTR_ATTRIBUTE_MAP = 128
 };
 
-enum OTBM_NodeTypes_t
-{
+enum OTBM_NodeTypes_t {
 	OTBM_ROOTV1 = 1,
 	OTBM_MAP_DATA = 2,
 	OTBM_ITEM_DEF = 3,
@@ -69,10 +72,19 @@ enum OTBM_NodeTypes_t
 	OTBM_HOUSETILE = 14,
 	OTBM_WAYPOINTS = 15,
 	OTBM_WAYPOINT = 16,
+
+	// Canary RME (unused)
+	// OTBM_SPAWN_NPC_AREA = 17,
+	// OTBM_SPAWNS_NPC = 18,
 };
 
-struct OTBM_root_header
-{
+enum PodiumFlags : uint8_t {
+	PODIUM_SHOW_PLATFORM = 1 << 0, // show the platform below the outfit
+	PODIUM_SHOW_OUTFIT = 1 << 1, // show outfit
+	PODIUM_SHOW_MOUNT = 1 << 2 // show mount
+};
+
+struct OTBM_root_header {
 	uint32_t version;
 	uint16_t width;
 	uint16_t height;
@@ -80,35 +92,30 @@ struct OTBM_root_header
 	uint32_t minorVersionItems;
 };
 
-struct OTBM_TeleportDest
-{
+struct OTBM_TeleportDest {
 	uint16_t x;
 	uint16_t y;
 	uint8_t z;
 };
 
-struct OTBM_Tile_area_coords
-{
+struct OTBM_Tile_area_coords {
 	uint16_t x;
 	uint16_t y;
 	uint8_t z;
 };
 
-struct OTBM_Tile_coords
-{
+struct OTBM_Tile_coords {
 	uint8_t x;
 	uint8_t y;
 };
 
-struct OTBM_TownTemple_coords
-{
+struct OTBM_TownTemple_coords {
 	uint16_t x;
 	uint16_t y;
 	uint8_t z;
 };
 
-struct OTBM_HouseTile_coords
-{
+struct OTBM_HouseTile_coords {
 	uint8_t x;
 	uint8_t y;
 	uint32_t houseid;
@@ -116,11 +123,12 @@ struct OTBM_HouseTile_coords
 
 #pragma pack()
 
-class IOMapOTBM : public IOMap
-{
+class IOMapOTBM : public IOMap {
 public:
-	IOMapOTBM(MapVersion ver) { version = ver; }
-	~IOMapOTBM() {}
+	IOMapOTBM(MapVersion ver) {
+		version = ver;
+	}
+	~IOMapOTBM() { }
 
 	static bool getVersionInfo(const FileName& identifier, MapVersion& out_ver);
 
@@ -128,19 +136,23 @@ public:
 	virtual bool saveMap(Map& map, const FileName& identifier);
 
 protected:
-	static bool getVersionInfo(NodeFileReadHandle* f,  MapVersion& out_ver);
+	static bool getVersionInfo(NodeFileReadHandle* f, MapVersion& out_ver);
 
 	virtual bool loadMap(Map& map, NodeFileReadHandle& handle);
 	bool loadSpawns(Map& map, const FileName& dir);
 	bool loadSpawns(Map& map, pugi::xml_document& doc);
 	bool loadHouses(Map& map, const FileName& dir);
 	bool loadHouses(Map& map, pugi::xml_document& doc);
+	bool loadWaypoints(Map& map, const FileName& dir);
+	bool loadWaypoints(Map& map, pugi::xml_document& doc);
 
 	virtual bool saveMap(Map& map, NodeFileWriteHandle& handle);
 	bool saveSpawns(Map& map, const FileName& dir);
 	bool saveSpawns(Map& map, pugi::xml_document& doc);
 	bool saveHouses(Map& map, const FileName& dir);
 	bool saveHouses(Map& map, pugi::xml_document& doc);
+	bool saveWaypoints(Map& map, const FileName& dir);
+	bool saveWaypoints(Map& map, pugi::xml_document& doc);
 };
 
 #endif

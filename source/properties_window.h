@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_PROPERTIES_WINDOW_H_
-#define BLUERME_PROPERTIES_WINDOW_H_
+#ifndef RME_PROPERTIES_WINDOW_H_
+#define RME_PROPERTIES_WINDOW_H_
 
 #include "main.h"
 
@@ -26,8 +26,7 @@ class ContainerItemButton;
 class ContainerItemPopupMenu;
 class ItemAttribute;
 
-class PropertiesWindow : public ObjectPropertiesWindowBase
-{
+class PropertiesWindow : public ObjectPropertiesWindowBase {
 public:
 	PropertiesWindow(wxWindow* parent, const Map* map, const Tile* tile, Item* item, wxPoint position = wxDefaultPosition);
 	~PropertiesWindow();
@@ -55,7 +54,7 @@ protected:
 
 	// Advanced pane
 	wxGrid* attributesGrid;
-	wxWindow* createAttributesPanel(wxWindow *parent);
+	wxWindow* createAttributesPanel(wxWindow* parent);
 	void saveAttributesPanel();
 	void SetGridValue(wxGrid* grid, int rowIndex, std::string name, const ItemAttribute& attr);
 

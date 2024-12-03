@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_BRUSH_ENUMS_H_
-#define BLUERME_BRUSH_ENUMS_H_
+#ifndef RME_BRUSH_ENUMS_H_
+#define RME_BRUSH_ENUMS_H_
 
 enum BorderType {
 	// Border types (also used for carpets)
@@ -64,7 +64,7 @@ enum BorderType {
 };
 
 enum TileAlignement {
-	TILE_NORTHWEST =1,
+	TILE_NORTHWEST = 1,
 	TILE_NORTH = 2,
 	TILE_NORTHEAST = 4,
 	TILE_WEST = 8,
@@ -85,6 +85,7 @@ enum DoorType {
 	WALL_DOOR_LOCKED,
 	WALL_DOOR_QUEST,
 	WALL_DOOR_MAGIC,
+	WALL_DOOR_NORMAL_ALT,
 	WALL_WINDOW,
 	WALL_HATCH_WINDOW,
 };

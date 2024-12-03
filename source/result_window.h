@@ -15,13 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_RESULT_WINDOW_H_
-#define BLUERME_RESULT_WINDOW_H_
+#ifndef RME_RESULT_WINDOW_H_
+#define RME_RESULT_WINDOW_H_
 
 #include "main.h"
 
-class SearchResultWindow : public wxPanel
-{
+class SearchResultWindow : public wxPanel {
 public:
 	SearchResultWindow(wxWindow* parent);
 	virtual ~SearchResultWindow();

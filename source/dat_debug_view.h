@@ -15,13 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_DAT_DEBUG_VIEW_H_
-#define BLUERME_DAT_DEBUG_VIEW_H_
+#ifndef RME_DAT_DEBUG_VIEW_H_
+#define RME_DAT_DEBUG_VIEW_H_
 
 class DatDebugViewListBox;
 
-class DatDebugView : public wxPanel
-{
+class DatDebugView : public wxPanel {
 public:
 	DatDebugView(wxWindow* parent);
 	~DatDebugView();
@@ -30,7 +29,6 @@ public:
 	void OnClickList(wxCommandEvent&);
 
 protected:
-
 	DatDebugViewListBox* item_list;
 	wxTextCtrl* search_field;
 

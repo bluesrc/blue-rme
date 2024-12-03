@@ -15,20 +15,19 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MAP_ALLOCATOR_H
-#define BLUERME_MAP_ALLOCATOR_H
+#ifndef RME_MAP_ALLOCATOR_H
+#define RME_MAP_ALLOCATOR_H
 
 #include "tile.h"
 #include "map_region.h"
 
 class BaseMap;
 
-class MapAllocator
-{
+class MapAllocator {
 
 public:
-	MapAllocator() {}
-	~MapAllocator() {}
+	MapAllocator() { }
+	~MapAllocator() { }
 
 	// shorthands for tiles
 	Tile* operator()(TileLocation* location) {

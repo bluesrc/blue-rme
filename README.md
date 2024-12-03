@@ -4,7 +4,7 @@
 
 This is a map editor for Blue Project, a base for poketibias servers.
 
-### This is a fork from [hjnilsson/rme](https://github.com/hjnilsson/rme/) based on: [commit](https://github.com/hampusborgos/rme/commit/da7152ec94031c76732e997de4624c8f1c010225)
+### This is a fork from [fridaii/RME-ZONES](https://github.com/fridaii/RME-ZONES) based on: [commit](https://github.com/fridaii/RME-ZONES/commit/66c4963bd8a5bf6bd347d4dfcae0c015b52f8b05)
 
 For a server to connect to, you can build your own with the [blue-server](https://github.com/bluesrc/blue-server).
 

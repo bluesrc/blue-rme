@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_CREATURES_H_
-#define BLUERME_CREATURES_H_
+#ifndef RME_CREATURES_H_
+#define RME_CREATURES_H_
 
 #include "outfit.h"
 
@@ -28,8 +28,7 @@ class CreatureBrush;
 
 typedef std::map<std::string, CreatureType*> CreatureMap;
 
-class CreatureDatabase
-{
+class CreatureDatabase {
 protected:
 	CreatureMap creature_map;
 
@@ -47,8 +46,12 @@ public:
 	CreatureType* addCreatureType(const std::string& name, bool isNpc, const Outfit& outfit);
 
 	bool hasMissing() const;
-	iterator begin() noexcept { return creature_map.begin(); }
-	iterator end() noexcept { return creature_map.end(); }
+	iterator begin() {
+		return creature_map.begin();
+	}
+	iterator end() {
+		return creature_map.end();
+	}
 
 	bool loadFromXML(const FileName& filename, bool standard, wxString& error, wxArrayString& warnings);
 	bool importXMLFromOT(const FileName& filename, wxString& error, wxArrayString& warnings);
@@ -56,8 +59,7 @@ public:
 	bool saveToXML(const FileName& filename);
 };
 
-class CreatureType
-{
+class CreatureType {
 public:
 	CreatureType();
 	CreatureType(const CreatureType& ct);

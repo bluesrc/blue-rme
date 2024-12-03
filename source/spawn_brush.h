@@ -15,22 +15,25 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_SPAWN_BRUSH_H
-#define BLUERME_SPAWN_BRUSH_H
+#ifndef RME_SPAWN_BRUSH_H
+#define RME_SPAWN_BRUSH_H
 
 #include "brush.h"
 
 //=============================================================================
 // SpawnBrush, place spawns
 
-class SpawnBrush : public Brush
-{
+class SpawnBrush : public Brush {
 public:
 	SpawnBrush(); // Create a RAWBrush of the specified type
 	virtual ~SpawnBrush();
 
-	bool isSpawn() const { return true; }
-	SpawnBrush* asSpawn() { return static_cast<SpawnBrush*>(this); }
+	bool isSpawn() const {
+		return true;
+	}
+	SpawnBrush* asSpawn() {
+		return static_cast<SpawnBrush*>(this);
+	}
 
 	virtual bool canDraw(BaseMap* map, const Position& position) const;
 	virtual void draw(BaseMap* map, Tile* tile, void* parameter); // parameter is brush size
@@ -38,9 +41,15 @@ public:
 
 	virtual int getLookID() const; // We don't have a look, sorry!
 	virtual std::string getName() const;
-	virtual bool canDrag() const { return true; }
-	virtual bool canSmear() const { return false; }
-	virtual bool oneSizeFitsAll() const { return true; }
+	virtual bool canDrag() const {
+		return true;
+	}
+	virtual bool canSmear() const {
+		return false;
+	}
+	virtual bool oneSizeFitsAll() const {
+		return true;
+	}
 };
 
 #endif

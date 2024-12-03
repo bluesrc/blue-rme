@@ -15,14 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-
-#ifndef BLUERME_MAIN_BAR_H_
-#define BLUERME_MAIN_BAR_H_
+#ifndef RME_MAIN_BAR_H_
+#define RME_MAIN_BAR_H_
 
 #include <wx/docview.h>
 
-namespace MenuBar
-{
+namespace MenuBar {
 	struct Action;
 
 	enum ActionID {
@@ -36,6 +34,7 @@ namespace MenuBar
 		IMPORT_POKEMONS,
 		IMPORT_MINIMAP,
 		EXPORT_MINIMAP,
+		EXPORT_TILESETS,
 		RELOAD_DATA,
 		RECENT_FILES,
 		PREFERENCES,
@@ -45,11 +44,13 @@ namespace MenuBar
 		FIND_ITEM,
 		REPLACE_ITEMS,
 		SEARCH_ON_MAP_EVERYTHING,
+		SEARCH_ON_MAP_ZONES,
 		SEARCH_ON_MAP_UNIQUE,
 		SEARCH_ON_MAP_ACTION,
 		SEARCH_ON_MAP_CONTAINER,
 		SEARCH_ON_MAP_WRITEABLE,
 		SEARCH_ON_SELECTION_EVERYTHING,
+		SEARCH_ON_SELECTION_ZONES,
 		SEARCH_ON_SELECTION_UNIQUE,
 		SEARCH_ON_SELECTION_ACTION,
 		SEARCH_ON_SELECTION_CONTAINER,
@@ -82,14 +83,12 @@ namespace MenuBar
 		MAP_REMOVE_ITEMS,
 		MAP_REMOVE_CORPSES,
 		MAP_REMOVE_UNREACHABLE_TILES,
-		MAP_REMOVE_EMPTY_SPAWNS,
 		MAP_CLEAN_HOUSE_ITEMS,
 		MAP_PROPERTIES,
 		MAP_STATISTICS,
 		VIEW_TOOLBARS_BRUSHES,
 		VIEW_TOOLBARS_POSITION,
 		VIEW_TOOLBARS_SIZES,
-		VIEW_TOOLBARS_INDICATORS,
 		VIEW_TOOLBARS_STANDARD,
 		NEW_VIEW,
 		TOGGLE_FULLSCREEN,
@@ -101,13 +100,18 @@ namespace MenuBar
 		GHOST_ITEMS,
 		GHOST_HIGHER_FLOORS,
 		HIGHLIGHT_ITEMS,
+		HIGHLIGHT_LOCKED_DOORS,
 		SHOW_INGAME_BOX,
 		SHOW_LIGHTS,
+		SHOW_LIGHT_STR,
+		SHOW_TECHNICAL_ITEMS,
+		SHOW_WAYPOINTS,
 		SHOW_GRID,
 		SHOW_EXTRA,
 		SHOW_CREATURES,
 		SHOW_SPAWNS,
 		SHOW_SPECIAL,
+		SHOW_ZONES,
 		SHOW_AS_MINIMAP,
 		SHOW_ONLY_COLORS,
 		SHOW_ONLY_MODIFIED,
@@ -116,10 +120,10 @@ namespace MenuBar
 		SHOW_TOOLTIPS,
 		SHOW_PREVIEW,
 		SHOW_WALL_HOOKS,
-		SHOW_PICKUPABLES,
-		SHOW_MOVEABLES,
+		SHOW_TOWNS,
+		ALWAYS_SHOW_ZONES,
+		EXT_HOUSE_SHADER,
 		WIN_MINIMAP,
-		WIN_ACTIONS_HISTORY,
 		NEW_PALETTE,
 		TAKE_SCREENSHOT,
 		LIVE_START,
@@ -128,6 +132,7 @@ namespace MenuBar
 		SELECT_TERRAIN,
 		SELECT_DOODAD,
 		SELECT_ITEM,
+		SELECT_COLLECTION,
 		SELECT_CREATURE,
 		SELECT_HOUSE,
 		SELECT_WAYPOINT,
@@ -152,13 +157,14 @@ namespace MenuBar
 		EXTENSIONS,
 		GOTO_WEBSITE,
 		ABOUT,
+
+		EXPERIMENTAL_FOG,
 	};
 }
 
 class MainFrame;
 
-class MainMenuBar : public wxEvtHandler
-{
+class MainMenuBar : public wxEvtHandler {
 public:
 	MainMenuBar(MainFrame* frame);
 	virtual ~MainMenuBar();
@@ -169,7 +175,6 @@ public:
 	// Turn on/off all buttons according to current editor state
 	void Update();
 	void UpdateFloorMenu(); // Only concerns the floor menu
-	void UpdateIndicatorsMenu();
 
 	void AddRecentFile(FileName file);
 	void LoadRecentFiles();
@@ -199,6 +204,7 @@ public:
 	void OnImportPokemonData(wxCommandEvent& event);
 	void OnImportMinimap(wxCommandEvent& event);
 	void OnExportMinimap(wxCommandEvent& event);
+	void OnExportTilesets(wxCommandEvent& event);
 	void OnReloadDataFiles(wxCommandEvent& event);
 
 	// Edit Menu
@@ -215,7 +221,6 @@ public:
 	void OnMapRemoveItems(wxCommandEvent& event);
 	void OnMapRemoveCorpses(wxCommandEvent& event);
 	void OnMapRemoveUnreachable(wxCommandEvent& event);
-	void OnMapRemoveEmptySpawns(wxCommandEvent& event);
 	void OnClearHouseTiles(wxCommandEvent& event);
 	void OnClearModifiedState(wxCommandEvent& event);
 	void OnToggleAutomagic(wxCommandEvent& event);
@@ -226,6 +231,7 @@ public:
 	void OnSearchForItem(wxCommandEvent& event);
 	void OnReplaceItems(wxCommandEvent& event);
 	void OnSearchForStuffOnMap(wxCommandEvent& event);
+	void OnSearchForZonesOnMap(wxCommandEvent& event);
 	void OnSearchForUniqueOnMap(wxCommandEvent& event);
 	void OnSearchForActionOnMap(wxCommandEvent& event);
 	void OnSearchForContainerOnMap(wxCommandEvent& event);
@@ -233,6 +239,7 @@ public:
 
 	// Select menu
 	void OnSearchForStuffOnSelection(wxCommandEvent& event);
+	void OnSearchForZonesOnSelection(wxCommandEvent& event);
 	void OnSearchForUniqueOnSelection(wxCommandEvent& event);
 	void OnSearchForActionOnSelection(wxCommandEvent& event);
 	void OnSearchForContainerOnSelection(wxCommandEvent& event);
@@ -266,12 +273,12 @@ public:
 
 	// Window Menu
 	void OnMinimapWindow(wxCommandEvent& event);
-	void OnActionsHistoryWindow(wxCommandEvent& event);
 	void OnNewPalette(wxCommandEvent& event);
 	void OnTakeScreenshot(wxCommandEvent& event);
 	void OnSelectTerrainPalette(wxCommandEvent& event);
 	void OnSelectDoodadPalette(wxCommandEvent& event);
 	void OnSelectItemPalette(wxCommandEvent& event);
+	void OnSelectCollectionPalette(wxCommandEvent& event);
 	void OnSelectHousePalette(wxCommandEvent& event);
 	void OnSelectCreaturePalette(wxCommandEvent& event);
 	void OnSelectWaypointPalette(wxCommandEvent& event);
@@ -291,16 +298,16 @@ protected:
 	wxObject* LoadItem(pugi::xml_node node, wxMenu* parent, wxArrayString& warnings, wxString& error);
 	// Checks the items in the menus according to the settings (in config)
 	void LoadValues();
-	void SearchItems(bool unique, bool action, bool container, bool writable, bool onSelection = false);
-protected:
+	void SearchItems(bool unique, bool action, bool container, bool writable, bool zones, bool onSelection = false);
 
+protected:
 	MainFrame* frame;
 	wxMenuBar* menubar;
 
 	// Used so that calling Check on menu items don't trigger events (avoids infinite recursion)
 	bool checking_programmaticly;
 
-	std::map<MenuBar::ActionID, std::list<wxMenuItem*> > items;
+	std::map<MenuBar::ActionID, std::list<wxMenuItem*>> items;
 
 	// Hardcoded recent files
 	wxFileHistory recentFiles;
@@ -310,13 +317,12 @@ protected:
 	DECLARE_EVENT_TABLE();
 };
 
-namespace MenuBar
-{
-	struct Action
-	{
-		Action() : id(0), kind(wxITEM_NORMAL) {}
-		Action(std::string s, int id, wxItemKind kind, wxCommandEventFunction handler)
-			: id(id), setting(0), name(s), kind(kind), handler(handler) {}
+namespace MenuBar {
+	struct Action {
+		Action() :
+			id(0), kind(wxITEM_NORMAL) { }
+		Action(std::string s, int id, wxItemKind kind, wxCommandEventFunction handler) :
+			id(id), setting(0), name(s), kind(kind), handler(handler) { }
 
 		int id;
 		int setting;

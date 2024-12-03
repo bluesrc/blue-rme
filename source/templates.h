@@ -15,16 +15,16 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MAP_TEMPLATES_H_
-#define BLUERME_MAP_TEMPLATES_H_
+#ifndef RME_MAP_TEMPLATES_H_
+#define RME_MAP_TEMPLATES_H_
 
 #include "common.h"
 
 struct ConversionMap {
 	// Many to Many
-	typedef std::map<std::vector<uint16_t>, std::vector<uint16_t> > MTM;
+	typedef std::map<std::vector<uint16_t>, std::vector<uint16_t>> MTM;
 	// Single to Many
-	typedef std::map<uint16_t, std::vector<uint16_t> > STM;
+	typedef std::map<uint16_t, std::vector<uint16_t>> STM;
 
 	MTM mtm;
 	STM stm;

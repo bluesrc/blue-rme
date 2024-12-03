@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_PALETTE_COMMONS_H_
-#define BLUERME_PALETTE_COMMONS_H_
+#ifndef RME_PALETTE_COMMONS_H_
+#define RME_PALETTE_COMMONS_H_
 
 #include "main.h"
 
@@ -78,6 +78,8 @@ public:
 	// Select the brush in the parameter, this only changes the look of the panel
 	virtual bool SelectBrush(const Brush* whatbrush);
 
+	virtual void DeselectAll() { }
+
 	// Updates the palette window to use the current brush size
 	virtual void OnUpdateBrushSize(BrushShape shape, int size);
 	// Called when this page is about to be displayed
@@ -90,6 +92,7 @@ public:
 	void OnRefreshTimer(wxTimerEvent&);
 
 	void RefreshOtherPalettes();
+
 protected:
 	typedef std::vector<PalettePanel*> ToolBarList;
 	ToolBarList tool_bars;
@@ -99,11 +102,49 @@ protected:
 	DECLARE_EVENT_TABLE();
 };
 
+class ZoneBrushPanel : public PalettePanel {
+public:
+	ZoneBrushPanel(wxWindow* parent);
+	~ZoneBrushPanel() { }
+
+	// Interface
+	// Flushes this panel and consequent views will feature reloaded data
+	void InvalidateContents();
+	// Loads the currently displayed page
+	void LoadCurrentContents();
+	// Loads all content in this panel
+	void LoadAllContents();
+
+	// Returns the currently selected brush (First brush if panel is not loaded)
+	Brush* GetSelectedBrush() const;
+	// Select the brush in the parameter, this only changes the look of the panel
+	bool SelectBrush(const Brush* whatbrush);
+
+	wxString GetName() const;
+	void SetToolbarIconSize(bool large);
+	void OnZoneIdChange(wxCommandEvent& WXUNUSED(event));
+
+	// Called when this page is displayed
+	void OnSwitchIn();
+
+	// wxWidgets event handling
+	void OnClickZoneBrushButton(wxCommandEvent& event);
+	void DeselectAll();
+
+protected:
+	bool loaded;
+	bool large_icons;
+
+	BrushButton* zoneButton;
+	wxSpinCtrl* zoneIdSpin;
+
+	DECLARE_EVENT_TABLE()
+};
+
 class BrushSizePanel : public PalettePanel {
 public:
 	BrushSizePanel(wxWindow* parent);
-	~BrushSizePanel() {}
-
+	~BrushSizePanel() { }
 
 	// Interface
 	// Flushes this panel and consequent views will feature reloaded data
@@ -126,13 +167,27 @@ public:
 	void OnClickCircleBrush(wxCommandEvent& event);
 
 	void OnClickBrushSize(int which);
-	void OnClickBrushSize0(wxCommandEvent& event) { OnClickBrushSize(0); }
-	void OnClickBrushSize1(wxCommandEvent& event) { OnClickBrushSize(1); }
-	void OnClickBrushSize2(wxCommandEvent& event) { OnClickBrushSize(2); }
-	void OnClickBrushSize4(wxCommandEvent& event) { OnClickBrushSize(4); }
-	void OnClickBrushSize6(wxCommandEvent& event) { OnClickBrushSize(6); }
-	void OnClickBrushSize8(wxCommandEvent& event) { OnClickBrushSize(8); }
-	void OnClickBrushSize11(wxCommandEvent& event){ OnClickBrushSize(11); }
+	void OnClickBrushSize0(wxCommandEvent& event) {
+		OnClickBrushSize(0);
+	}
+	void OnClickBrushSize1(wxCommandEvent& event) {
+		OnClickBrushSize(1);
+	}
+	void OnClickBrushSize2(wxCommandEvent& event) {
+		OnClickBrushSize(2);
+	}
+	void OnClickBrushSize4(wxCommandEvent& event) {
+		OnClickBrushSize(4);
+	}
+	void OnClickBrushSize6(wxCommandEvent& event) {
+		OnClickBrushSize(6);
+	}
+	void OnClickBrushSize8(wxCommandEvent& event) {
+		OnClickBrushSize(8);
+	}
+	void OnClickBrushSize11(wxCommandEvent& event) {
+		OnClickBrushSize(11);
+	}
 
 protected:
 	bool loaded;
@@ -186,11 +241,16 @@ public:
 	void OnClickQuestDoorButton(wxCommandEvent& event);
 	void OnClickHatchDoorButton(wxCommandEvent& event);
 	void OnClickWindowDoorButton(wxCommandEvent& event);
+	void OnClickNormalAltDoorButton(wxCommandEvent& event);
+	void OnClickArchwayDoorButton(wxCommandEvent& event);
 	// ----
 	void OnClickPZBrushButton(wxCommandEvent& event);
 	void OnClickNOPVPBrushButton(wxCommandEvent& event);
 	void OnClickNoLogoutBrushButton(wxCommandEvent& event);
 	void OnClickPVPZoneBrushButton(wxCommandEvent& event);
+	// ----
+	void OnClickLockDoorCheckbox(wxCommandEvent& event);
+
 public:
 	void DeselectAll();
 
@@ -206,11 +266,15 @@ public:
 	BrushButton* questDoorButton;
 	BrushButton* hatchDoorButton;
 	BrushButton* windowDoorButton;
+	BrushButton* normalDoorAltButton;
+	BrushButton* archwayDoorButton;
 	// ----
 	BrushButton* pzBrushButton;
 	BrushButton* nopvpBrushButton;
 	BrushButton* nologBrushButton;
 	BrushButton* pvpzoneBrushButton;
+
+	wxCheckBox* lockDoorCheckbox;
 
 	DECLARE_EVENT_TABLE()
 };
@@ -229,6 +293,7 @@ public:
 	// wxWidgets event handling
 	void OnScroll(wxScrollEvent& event);
 	void OnClickCustomThickness(wxCommandEvent& event);
+
 public:
 	wxSlider* slider;
 	wxCheckBox* use_button;

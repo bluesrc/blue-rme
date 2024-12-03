@@ -14,6 +14,14 @@ bluerme
 bluerme.cfg
 data/user
 
+# exe and dll
+*.dll
+*.exe
+
+# assets
+*.spr
+*.dat
+
 # Visual Studio
 *.MAP
 *.user
@@ -24,9 +32,8 @@ data/user
 *.obj
 *.db
 *.opendb
-*.user
-*.vs
 
+vcproj/.vs/
 vcproj/ipch/
 vcproj/Beta Release/
 vcproj/Debug/
@@ -48,3 +55,6 @@ xcuserdata
 # CLion
 .idea/
 cmake-build-debug/
+
+# Notepad++
+*.bak

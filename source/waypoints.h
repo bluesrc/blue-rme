@@ -15,13 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_WAYPOINTS_H_
-#define BLUERME_WAYPOINTS_H_
+#ifndef RME_WAYPOINTS_H_
+#define RME_WAYPOINTS_H_
 
 #include "position.h"
 
-class Waypoint
-{
+class Waypoint {
 public:
 	std::string name;
 	Position pos;
@@ -29,26 +28,37 @@ public:
 
 typedef std::map<std::string, Waypoint*> WaypointMap;
 
-class Waypoints
-{
+class Waypoints {
+	Map& map;
+
 public:
-	Waypoints(Map& map) : map(map) {}
-	virtual ~Waypoints();
+	Waypoints(Map& map) :
+		map(map) { }
+	~Waypoints() {
+		for (WaypointMap::iterator iter = waypoints.begin(); iter != waypoints.end(); ++iter) {
+			delete iter->second;
+		}
+	}
 
 	void addWaypoint(Waypoint* wp);
 	Waypoint* getWaypoint(std::string name);
-	Waypoint* getWaypoint(const Position& position);
+	Waypoint* getWaypoint(TileLocation* location);
 	void removeWaypoint(std::string name);
 
 	WaypointMap waypoints;
 
-	WaypointMap::iterator begin() { return waypoints.begin(); }
-	WaypointMap::const_iterator begin() const { return waypoints.begin(); }
-	WaypointMap::iterator end() { return waypoints.end(); }
-	WaypointMap::const_iterator end() const { return waypoints.end(); }
-
-private:
-	Map& map;
+	WaypointMap::iterator begin() {
+		return waypoints.begin();
+	}
+	WaypointMap::const_iterator begin() const {
+		return waypoints.begin();
+	}
+	WaypointMap::iterator end() {
+		return waypoints.end();
+	}
+	WaypointMap::const_iterator end() const {
+		return waypoints.end();
+	}
 };
 
 #endif

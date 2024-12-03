@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_ITEMS_H_
-#define BLUERME_ITEMS_H_
+#ifndef RME_ITEMS_H_
+#define RME_ITEMS_H_
 
 #include "filehandle.h"
 #include "brush_enums.h"
@@ -40,6 +40,8 @@ class GameSprite;
 class GameSprite;
 class ItemDatabase;
 
+extern ItemDatabase g_items;
+
 typedef uint8_t attribute_t;
 typedef uint32_t flags_t;
 typedef uint16_t datasize_t;
@@ -60,6 +62,7 @@ enum ItemGroup_t {
 	ITEM_GROUP_FLUID,
 	ITEM_GROUP_DOOR,
 	ITEM_GROUP_DEPRECATED,
+	ITEM_GROUP_PODIUM,
 	ITEM_GROUP_LAST
 };
 
@@ -74,12 +77,41 @@ enum ItemTypes_t {
 	ITEM_TYPE_TELEPORT,
 	ITEM_TYPE_BED,
 	ITEM_TYPE_KEY,
+	ITEM_TYPE_PODIUM,
 	ITEM_TYPE_LAST
+};
+
+enum SlotPositionBits : uint32_t {
+	SLOTP_WHEREEVER = 0xFFFFFFFF,
+	SLOTP_HEAD = 1 << 0,
+	SLOTP_NECKLACE = 1 << 1,
+	SLOTP_BACKPACK = 1 << 2,
+	SLOTP_ARMOR = 1 << 3,
+	SLOTP_RIGHT = 1 << 4,
+	SLOTP_LEFT = 1 << 5,
+	SLOTP_LEGS = 1 << 6,
+	SLOTP_FEET = 1 << 7,
+	SLOTP_RING = 1 << 8,
+	SLOTP_AMMO = 1 << 9,
+	SLOTP_DEPOT = 1 << 10,
+	SLOTP_TWO_HAND = 1 << 11,
+	SLOTP_HAND = (SLOTP_LEFT | SLOTP_RIGHT)
+};
+
+enum WeaponType_t : uint8_t {
+	WEAPON_NONE,
+	WEAPON_SWORD,
+	WEAPON_CLUB,
+	WEAPON_AXE,
+	WEAPON_SHIELD,
+	WEAPON_DISTANCE,
+	WEAPON_WAND,
+	WEAPON_AMMO,
 };
 
 /////////OTB specific//////////////
 
-enum rootattrib_t{
+enum rootattrib_t {
 	ROOT_ATTR_VERSION = 0x01
 };
 
@@ -107,17 +139,18 @@ enum itemattrib_t {
 	ITEM_ATTR_08,
 	ITEM_ATTR_LIGHT,
 
-	//1-byte aligned
+	// 1-byte aligned
 	ITEM_ATTR_DECAY2,
 	ITEM_ATTR_WEAPON2,
 	ITEM_ATTR_AMU2,
 	ITEM_ATTR_ARMOR2,
 	ITEM_ATTR_WRITEABLE2,
 	ITEM_ATTR_LIGHT2,
-
 	ITEM_ATTR_TOPORDER,
-
 	ITEM_ATTR_WRITEABLE3,
+
+	ITEM_ATTR_WAREID,
+	ITEM_ATTR_CLASSIFICATION,
 
 	ITEM_ATTR_LAST
 };
@@ -149,7 +182,7 @@ enum itemflags_t {
 	FLAG_IGNORE_LOOK = 1 << 23
 };
 
-enum slotsOTB_t{
+enum slotsOTB_t {
 	OTB_SLOT_DEFAULT,
 	OTB_SLOT_HEAD,
 	OTB_SLOT_BODY,
@@ -164,26 +197,26 @@ enum slotsOTB_t{
 };
 
 enum ShootTypeOtb_t {
-	OTB_SHOOT_NONE          = 0,
-	OTB_SHOOT_BOLT          = 1,
-	OTB_SHOOT_ARROW         = 2,
-	OTB_SHOOT_FIRE          = 3,
-	OTB_SHOOT_ENERGY        = 4,
-	OTB_SHOOT_POISONARROW   = 5,
-	OTB_SHOOT_BURSTARROW    = 6,
-	OTB_SHOOT_THROWINGSTAR  = 7,
+	OTB_SHOOT_NONE = 0,
+	OTB_SHOOT_BOLT = 1,
+	OTB_SHOOT_ARROW = 2,
+	OTB_SHOOT_FIRE = 3,
+	OTB_SHOOT_ENERGY = 4,
+	OTB_SHOOT_POISONARROW = 5,
+	OTB_SHOOT_BURSTARROW = 6,
+	OTB_SHOOT_THROWINGSTAR = 7,
 	OTB_SHOOT_THROWINGKNIFE = 8,
-	OTB_SHOOT_SMALLSTONE    = 9,
-	OTB_SHOOT_SUDDENDEATH   = 10,
-	OTB_SHOOT_LARGEROCK     = 11,
-	OTB_SHOOT_SNOWBALL      = 12,
-	OTB_SHOOT_POWERBOLT     = 13,
-	OTB_SHOOT_SPEAR         = 14,
-	OTB_SHOOT_POISONFIELD   = 15,
-	OTB_SHOOT_INFERNALBOLT  = 16
+	OTB_SHOOT_SMALLSTONE = 9,
+	OTB_SHOOT_SUDDENDEATH = 10,
+	OTB_SHOOT_LARGEROCK = 11,
+	OTB_SHOOT_SNOWBALL = 12,
+	OTB_SHOOT_POWERBOLT = 13,
+	OTB_SHOOT_SPEAR = 14,
+	OTB_SHOOT_POISONFIELD = 15,
+	OTB_SHOOT_INFERNALBOLT = 16
 };
 
-//1-byte aligned structs
+// 1-byte aligned structs
 #pragma pack(1)
 
 struct VERSIONINFO {
@@ -234,43 +267,77 @@ struct writeableBlock3 {
 
 #pragma pack()
 
-class ItemType
-{
+class ItemType {
 private:
-	ItemType(const ItemType&) {}
+	ItemType(const ItemType&) { }
 
 public:
 	ItemType();
+	~ItemType();
 
-	bool isGroundTile() const noexcept { return group == ITEM_GROUP_GROUND; }
-	bool isSplash() const noexcept { return group == ITEM_GROUP_SPLASH; }
-	bool isFluidContainer() const noexcept { return group == ITEM_GROUP_FLUID; }
+	bool isGroundTile() const {
+		return (group == ITEM_GROUP_GROUND);
+	}
+	bool isSplash() const {
+		return (group == ITEM_GROUP_SPLASH);
+	}
+	bool isFluidContainer() const {
+		return (group == ITEM_GROUP_FLUID);
+	}
 
-	bool isClientCharged() const { return client_chargeable; }
-	bool isExtraCharged() const { return !client_chargeable && extra_chargeable; }
+	bool isClientCharged() const {
+		return client_chargeable;
+	}
+	bool isExtraCharged() const {
+		return !client_chargeable && extra_chargeable;
+	}
 
-	bool isDepot() const noexcept { return type == ITEM_TYPE_DEPOT; }
-	bool isMailbox() const noexcept { return type == ITEM_TYPE_MAILBOX; }
-	bool isTrashHolder() const noexcept { return type == ITEM_TYPE_TRASHHOLDER; }
-	bool isContainer() const noexcept { return type == ITEM_TYPE_CONTAINER; }
-	bool isDoor() const noexcept { return type == ITEM_TYPE_DOOR; }
-	bool isMagicField() const noexcept { return type == ITEM_TYPE_MAGICFIELD; }
-	bool isTeleport() const noexcept { return type == ITEM_TYPE_TELEPORT; }
-	bool isBed() const noexcept { return type == ITEM_TYPE_BED; }
-	bool isKey() const noexcept { return type == ITEM_TYPE_KEY; }
+	bool isDepot() const {
+		return (type == ITEM_TYPE_DEPOT);
+	}
+	bool isMailbox() const {
+		return (type == ITEM_TYPE_MAILBOX);
+	}
+	bool isTrashHolder() const {
+		return (type == ITEM_TYPE_TRASHHOLDER);
+	}
+	bool isContainer() const {
+		return (type == ITEM_TYPE_CONTAINER);
+	}
+	bool isDoor() const {
+		return (type == ITEM_TYPE_DOOR);
+	}
+	bool isMagicField() const {
+		return (type == ITEM_TYPE_MAGICFIELD);
+	}
+	bool isTeleport() const {
+		return (type == ITEM_TYPE_TELEPORT);
+	}
+	bool isBed() const {
+		return (type == ITEM_TYPE_BED);
+	}
+	bool isKey() const {
+		return (type == ITEM_TYPE_KEY);
+	}
+	bool isPodium() const {
+		return (type == ITEM_TYPE_PODIUM);
+	}
 
-	bool isStackable() const noexcept { return stackable; }
-	bool isMetaItem() const noexcept { return is_metaitem; }
+	bool isStackable() const {
+		return stackable;
+	}
+	bool isMetaItem() const {
+		return is_metaitem;
+	}
 
-	bool isFloorChange() const noexcept;
+	bool isFloorChange() const;
 
-	float getWeight() const noexcept { return weight; }
-	uint16_t getVolume() const noexcept { return volume; }
-
-// editor related
-public:
+	GameSprite* sprite;
+	uint16_t id;
+	uint16_t clientID;
 	Brush* brush;
 	Brush* doodad_brush;
+	Brush* collection_brush;
 	RAWBrush* raw_brush;
 	bool is_metaitem;
 	// This is needed as a consequence of the item palette & the raw palette
@@ -279,31 +346,19 @@ public:
 	bool has_raw;
 	bool in_other_tileset;
 
-	uint16_t ground_equivalent;
-	uint32_t border_group;
-	bool has_equivalent; // True if any item has this as ground_equivalent
-	bool wall_hate_me; // (For wallbrushes, regard this as not part of the wall)
-
-	bool isBorder;
-	bool isOptionalBorder;
-	bool isWall;
-	bool isBrushDoor;
-	bool isOpen;
-	bool isTable;
-	bool isCarpet;
-
-public:
-	GameSprite* sprite;
-
-	uint16_t id;
-	uint16_t clientID;
-
 	ItemGroup_t group;
 	ItemTypes_t type;
 
 	uint16_t volume;
 	uint16_t maxTextLen;
-	//uint16_t writeOnceItemId;
+	// uint16_t writeOnceItemId;
+	uint16_t slot_position;
+	uint8_t weapon_type;
+	uint8_t classification = 0; // 12.81
+	uint16_t ground_equivalent;
+	uint32_t border_group;
+	bool has_equivalent; // True if any item has this as ground_equivalent
+	bool wall_hate_me; // (For wallbrushes, regard this as not part of the wall)
 
 	std::string name;
 	std::string editorsuffix;
@@ -333,6 +388,14 @@ public:
 	bool alwaysOnBottom;
 	bool pickupable;
 	bool rotable;
+	bool isBorder;
+	bool isOptionalBorder;
+	bool isWall;
+	bool isBrushDoor;
+	bool isOpen; // door or window physically open
+	bool isLocked; // door key locked
+	bool isTable;
+	bool isCarpet;
 
 	bool floorChangeDown;
 	bool floorChangeNorth;
@@ -352,29 +415,33 @@ public:
 	BorderType border_alignment;
 };
 
-class ItemDatabase
-{
+class ItemDatabase {
 public:
 	ItemDatabase();
 	~ItemDatabase();
 
 	void clear();
 
-	uint16_t getMinID() const noexcept { return 100; }
-	uint16_t getMaxID() const noexcept { return maxItemId; }
-	const ItemType& getItemType(uint16_t id) const;
-	ItemType* getRawItemType(uint16_t id);
+	ItemType& operator[](size_t id) {
+		return getItemType(id);
+	}
+	uint16_t getMaxID() const {
+		return max_item_id;
+	}
 
-	bool isValidID(uint16_t id) const;
+	bool typeExists(int id) const;
+	ItemType& getItemType(int id);
+	ItemType& getItemIdByClientID(int spriteId);
 
 	bool loadFromOtb(const FileName& datafile, wxString& error, wxArrayString& warnings);
 	bool loadFromGameXml(const FileName& datafile, wxString& error, wxArrayString& warnings);
-	bool loadItemFromGameXml(pugi::xml_node itemNode, uint16_t id);
+	bool loadItemFromGameXml(pugi::xml_node itemNode, int id);
 	bool loadMetaItem(pugi::xml_node node);
 
-	//typedef std::map<int32_t, ItemType*> ItemMap;
+	// typedef std::map<int32_t, ItemType*> ItemMap;
 	typedef contigous_vector<ItemType*> ItemMap;
 	typedef std::map<std::string, ItemType*> ItemNameMap;
+	ItemMap items;
 
 	// Version information
 	uint32_t MajorVersion;
@@ -387,24 +454,18 @@ protected:
 	bool loadFromOtbVer3(BinaryNode* itemNode, wxString& error, wxArrayString& warnings);
 
 protected:
-	ItemMap items;
-
 	// Count of GameSprite types
 	uint16_t item_count;
 	uint16_t effect_count;
 	uint16_t pokemon_count;
 	uint16_t distance_count;
 
-	uint16_t minClientID;
-	uint16_t maxClientID;
-	uint16_t maxItemId;
-
-	ItemType dummy;
+	uint16_t minclientID;
+	uint16_t maxclientID;
+	uint16_t max_item_id;
 
 	friend class GameSprite;
 	friend class Item;
 };
-
-extern ItemDatabase g_items;
 
 #endif

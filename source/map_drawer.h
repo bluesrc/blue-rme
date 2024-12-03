@@ -15,13 +15,17 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MAP_DRAWER_H_
-#define BLUERME_MAP_DRAWER_H_
+#ifndef RME_MAP_DRAWER_H_
+#define RME_MAP_DRAWER_H_
+
+#include <iostream>
+#include <unordered_set>
+#include <unordered_map>
+#include <memory>
 
 class GameSprite;
 
-struct MapTooltip
-{
+struct MapTooltip {
 	enum TextLength {
 		MAX_CHARS_PER_LINE = 40,
 		MAX_CHARS = 255,
@@ -33,8 +37,9 @@ struct MapTooltip
 	}
 
 	void checkLineEnding() {
-		if(text.at(text.size() - 1) == '\n')
+		if (text.at(text.size() - 1) == '\n') {
 			text.resize(text.size() - 1);
+		}
 	}
 
 	int x, y;
@@ -44,23 +49,20 @@ struct MapTooltip
 };
 
 // Storage during drawing, for option caching
-class DrawingOptions
-{
-public:
+struct DrawingOptions {
 	DrawingOptions();
 
 	void SetIngame();
 	void SetDefault();
-
-	bool isOnlyColors() const noexcept;
-	bool isTileIndicators() const noexcept;
-	bool isTooltips() const noexcept;
 	bool isDrawLight() const noexcept;
 
 	bool transparent_floors;
 	bool transparent_items;
 	bool show_ingame_box;
 	bool show_lights;
+	bool show_light_str;
+	bool show_tech_items;
+	bool show_waypoints;
 	bool ingame;
 	bool dragging;
 
@@ -71,9 +73,11 @@ public:
 	bool show_houses;
 	bool show_shade;
 	bool show_special_tiles;
+	bool show_zone_areas;
 	bool show_items;
 
 	bool highlight_items;
+	bool highlight_locked_doors;
 	bool show_blocking;
 	bool show_tooltips;
 	bool show_as_minimap;
@@ -81,16 +85,113 @@ public:
 	bool show_only_modified;
 	bool show_preview;
 	bool show_hooks;
-	bool show_pickupables;
-	bool show_moveables;
 	bool hide_items_when_zoomed;
+	bool show_towns;
+	bool always_show_zones;
+	bool extended_house_shader;
+
+	bool experimental_fog;
 };
 
 class MapCanvas;
 class LightDrawer;
 
-class MapDrawer
-{
+struct FinderPosition {
+	FinderPosition() { }
+	FinderPosition(int _x, int _y, int _z) :
+		x(_x), y(_y), z(_z) { }
+	int x, y, z;
+
+	bool operator==(const FinderPosition& other) const {
+		return x == other.x && y == other.y && z == other.z;
+	}
+
+	double distance(const FinderPosition& b) const {
+		return std::sqrt(std::pow(x - b.x, 2) + std::pow(y - b.y, 2));
+	}
+
+	struct Hash {
+		size_t operator()(const FinderPosition& p) const {
+			return p.x ^ p.y ^ p.z;
+		}
+	};
+};
+
+class ZoneFinder {
+private:
+	std::unordered_set<FinderPosition, FinderPosition::Hash> positions;
+	std::vector<std::vector<FinderPosition>> zones;
+	std::unordered_set<FinderPosition, FinderPosition::Hash> visited;
+
+	bool isValid(const FinderPosition& pos) {
+		return positions.find(pos) != positions.end() && visited.find(pos) == visited.end();
+	}
+
+	void dfs(const FinderPosition& pos, std::vector<FinderPosition>& zone) {
+		if (visited.find(pos) != visited.end()) {
+			return;
+		}
+
+		visited.insert(pos);
+		zone.push_back(pos);
+
+		std::vector<FinderPosition> neighbors = {
+			{ pos.x + 1, pos.y, pos.z },
+			{ pos.x - 1, pos.y, pos.z },
+			{ pos.x, pos.y + 1, pos.z },
+			{ pos.x, pos.y - 1, pos.z }
+		};
+
+		for (const auto& next : neighbors) {
+			if (isValid(next)) {
+				dfs(next, zone);
+			}
+		}
+	}
+
+public:
+	ZoneFinder(const std::vector<FinderPosition>& inputPositions) :
+		positions(inputPositions.begin(), inputPositions.end()) { }
+
+	std::vector<std::vector<FinderPosition>> findZones() {
+		for (const auto& pos : positions) {
+			if (visited.find(pos) == visited.end()) {
+				std::vector<FinderPosition> zone;
+				dfs(pos, zone);
+				zones.push_back(zone);
+			}
+		}
+
+		return zones;
+	}
+
+	FinderPosition findClosestToCenter(const std::vector<FinderPosition>& zone) {
+		FinderPosition centroid = { 0, 0, 0 };
+		for (const auto& pos : zone) {
+			centroid.x += pos.x;
+			centroid.y += pos.y;
+			centroid.z += pos.z;
+		}
+
+		centroid.x /= zone.size();
+		centroid.y /= zone.size();
+		centroid.z /= zone.size();
+
+		double minDistance = std::numeric_limits<double>::max();
+		FinderPosition closestPosition;
+		for (const auto& pos : zone) {
+			const double dist = pos.distance(centroid);
+			if (dist < minDistance) {
+				minDistance = dist;
+				closestPosition = pos;
+			}
+		}
+
+		return closestPosition;
+	}
+};
+
+class MapDrawer {
 	MapCanvas* canvas;
 	Editor& editor;
 	DrawingOptions options;
@@ -109,11 +210,9 @@ class MapDrawer
 	int floor;
 
 protected:
+	std::unordered_map<uint16_t, std::vector<FinderPosition>> zoneTiles;
 	std::vector<MapTooltip*> tooltips;
 	std::ostringstream tooltip;
-
-	wxStopWatch pos_indicator_timer;
-	Position pos_indicator;
 
 public:
 	MapDrawer(MapCanvas* canvas);
@@ -128,9 +227,7 @@ public:
 
 	void Draw();
 	void DrawBackground();
-	void DrawShade(int mapz);
 	void DrawMap();
-	void DrawSecondaryMap(int mapz);
 	void DrawDraggingShadow();
 	void DrawHigherFloors();
 	void DrawSelectionBox();
@@ -139,28 +236,28 @@ public:
 	void DrawIngameBox();
 	void DrawGrid();
 	void DrawTooltips();
+	void DrawLight();
 
 	void TakeScreenshot(uint8_t* screenshot_buffer);
 
-	void ShowPositionIndicator(const Position& position);
-
-	DrawingOptions& getOptions() noexcept { return options; }
+	DrawingOptions& getOptions() {
+		return options;
+	}
 
 protected:
-	void BlitItem(int& screenx, int& screeny, const Tile* tile, const Item* item, bool ephemeral = false, int red = 255, int green = 255, int blue = 255, int alpha = 255);
-	void BlitItem(int& screenx, int& screeny, const Position& pos, const Item* item, bool ephemeral = false, int red = 255, int green = 255, int blue = 255, int alpha = 255);
+	void BlitItem(int& screenx, int& screeny, const Tile* tile, Item* item, bool ephemeral = false, int red = 255, int green = 255, int blue = 255, int alpha = 255);
+	void BlitItem(int& screenx, int& screeny, const Position& pos, Item* item, bool ephemeral = false, int red = 255, int green = 255, int blue = 255, int alpha = 255, const Tile* tile = nullptr);
 	void BlitSpriteType(int screenx, int screeny, uint32_t spriteid, int red = 255, int green = 255, int blue = 255, int alpha = 255);
 	void BlitSpriteType(int screenx, int screeny, GameSprite* spr, int red = 255, int green = 255, int blue = 255, int alpha = 255);
 	void BlitCreature(int screenx, int screeny, const Creature* c, int red = 255, int green = 255, int blue = 255, int alpha = 255);
 	void BlitCreature(int screenx, int screeny, const Outfit& outfit, Direction dir, int red = 255, int green = 255, int blue = 255, int alpha = 255);
+	void BlitSquare(int sx, int sy, int red, int green, int blue, int alpha, int size = 0);
+	void DrawRawBrush(int screenx, int screeny, ItemType* itemType, uint8_t r, uint8_t g, uint8_t b, uint8_t alpha);
 	void DrawTile(TileLocation* tile);
 	void DrawBrushIndicator(int x, int y, Brush* brush, uint8_t r, uint8_t g, uint8_t b);
 	void DrawHookIndicator(int x, int y, const ItemType& type);
-	void DrawTileIndicators(TileLocation* location);
-	void DrawIndicator(int x, int y, int indicator, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint8_t a = 255);
-	void DrawPositionIndicator(int z);
-	void WriteTooltip(const Item* item, std::ostringstream& stream);
-	void WriteTooltip(const Waypoint* item, std::ostringstream& stream);
+	void WriteTooltip(Tile* tile, Item* item, std::ostringstream& stream, bool isHouseTile);
+	void WriteTooltip(Waypoint* item, std::ostringstream& stream);
 	void MakeTooltip(int screenx, int screeny, const std::string& text, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255);
 	void AddLight(TileLocation* location);
 
@@ -175,18 +272,14 @@ protected:
 		COLOR_BLANK,
 	};
 
-	void getColor(Brush* brush, const Position& position, uint8_t &r, uint8_t &g, uint8_t &b);
-	void glBlitTexture(int x, int y, int textureId, int red, int green, int blue, int alpha, bool adjustZoom = false);
-	void glBlitSquare(int x, int y, int red, int green, int blue, int alpha);
-	void glBlitSquare(int x, int y, const wxColor& color);
-	void glColor(const wxColor& color);
+	void getColor(Brush* brush, const Position& position, uint8_t& r, uint8_t& g, uint8_t& b);
+	void glBlitTexture(int sx, int sy, int texture_number, int red, int green, int blue, int alpha);
+	void glBlitSquare(int sx, int sy, int red, int green, int blue, int alpha, int size = 0);
+	void glColor(wxColor color);
 	void glColor(BrushColor color);
 	void glColorCheck(Brush* brush, const Position& pos);
 	void drawRect(int x, int y, int w, int h, const wxColor& color, int width = 1);
 	void drawFilledRect(int x, int y, int w, int h, const wxColor& color);
-
-private:
-	void getDrawPosition(const Position& position, int &x, int &y);
 };
 
 #endif

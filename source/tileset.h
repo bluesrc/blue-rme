@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_TILESET_H_
-#define BLUERME_TILESET_H_
+#ifndef RME_TILESET_H_
+#define RME_TILESET_H_
 
 class Brushes;
 
@@ -25,6 +25,7 @@ enum TilesetCategoryType {
 	TILESET_TERRAIN,
 	TILESET_CREATURE,
 	TILESET_DOODAD,
+	TILESET_COLLECTION,
 	TILESET_ITEM,
 	TILESET_RAW,
 	TILESET_HOUSE,
@@ -37,8 +38,12 @@ public:
 	~TilesetCategory();
 
 	bool isTrivial() const;
-	TilesetCategoryType getType() const { return type; }
-	size_t size() const { return brushlist.size(); }
+	TilesetCategoryType getType() const {
+		return type;
+	}
+	size_t size() const {
+		return brushlist.size();
+	}
 
 	void loadBrush(pugi::xml_node node, wxArrayString& warnings);
 	void clear();
@@ -47,6 +52,7 @@ public:
 
 protected:
 	TilesetCategoryType type;
+
 public:
 	std::vector<Brush*> brushlist;
 	Tileset& tileset;
@@ -73,6 +79,7 @@ public:
 
 public:
 	std::string name;
+	int16_t previousId;
 	TilesetCategoryArray categories;
 
 protected:

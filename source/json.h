@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_JSON_H_
-#define BLUERME_JSON_H_
+#ifndef RME_JSON_H_
+#define RME_JSON_H_
 
 #include "json/json_spirit.h"
 

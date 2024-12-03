@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_PNG_HEADER_FILE_H_
-#define BLUERME_PNG_HEADER_FILE_H_
+#ifndef RME_PNG_HEADER_FILE_H_
+#define RME_PNG_HEADER_FILE_H_
 
 extern unsigned char circular_1_png[453];
 extern unsigned char circular_1_small_png[253];
@@ -72,4 +72,6 @@ extern unsigned char window_hatch_png[910];
 extern unsigned char window_hatch_small_png[641];
 extern unsigned char window_normal_png[947];
 extern unsigned char window_normal_small_png[641];
-#endif //_BLUERME_PNG_HEADER_FILE_H_
+extern unsigned char zone_brush_small_png[603];
+extern unsigned char zone_brush_zone_png[832];
+#endif //_RME_PNG_HEADER_FILE_H_

@@ -15,13 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_EXTENSION_WINDOW_H
-#define BLUERME_EXTENSION_WINDOW_H
+#ifndef RME_EXTENSION_WINDOW_H
+#define RME_EXTENSION_WINDOW_H
 
 class MaterialsExtension;
 
-class ExtensionsDialog : public wxDialog
-{
+class ExtensionsDialog : public wxDialog {
 public:
 	ExtensionsDialog(wxWindow* parent);
 	virtual ~ExtensionsDialog();
@@ -36,6 +35,5 @@ private:
 	wxString HTML() const;
 	wxString HTMLForExtension(MaterialsExtension* me) const;
 };
-
 
 #endif

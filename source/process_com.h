@@ -15,39 +15,39 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-
 #ifdef _USE_PROCESS_COM
 
-#ifndef BLUERME_PROCESS_COMMUNICATION_H_
-#define BLUERME_PROCESS_COMMUNICATION_H_
+	#ifndef RME_PROCESS_COMMUNICATION_H_
+		#define RME_PROCESS_COMMUNICATION_H_
 
-#include "wx/ipc.h"
+		#include "wx/ipc.h"
 
-class BLUERMEProcessConnection : public wxConnection {
+class RMEProcessConnection : public wxConnection {
 public:
-	BLUERMEProcessConnection();
-	~BLUERMEProcessConnection();
+	RMEProcessConnection();
+	~RMEProcessConnection();
 
 	bool OnExec(const wxString& topic, const wxString& fileName);
 };
 
-class BLUERMEProcessServer : public wxServer {
+class RMEProcessServer : public wxServer {
 public:
-	BLUERMEProcessServer();
-	~BLUERMEProcessServer();
+	RMEProcessServer();
+	~RMEProcessServer();
 
 	wxConnectionBase* OnAcceptConnection(const wxString& topic);
 };
 
-class BLUERMEProcessClient : public wxClient {
+class RMEProcessClient : public wxClient {
 	wxConnectionBase* proc;
+
 public:
-	BLUERMEProcessClient();
-	~BLUERMEProcessClient();
+	RMEProcessClient();
+	~RMEProcessClient();
 
 	wxConnectionBase* OnMakeConnection();
 };
 
-#endif
+	#endif
 
 #endif
