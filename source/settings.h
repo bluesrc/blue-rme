@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_SETTINGS_H_
-#define BLUERME_SETTINGS_H_
+#ifndef RME_SETTINGS_H_
+#define RME_SETTINGS_H_
 
 #include "main.h"
 
@@ -42,7 +42,6 @@ namespace Config {
 		TRANSPARENT_FLOORS,
 		TRANSPARENT_ITEMS,
 		SHOW_INGAME_BOX,
-		SHOW_LIGHTS,
 		SHOW_GRID,
 		SHOW_EXTRA,
 		SHOW_ALL_FLOORS,
@@ -51,14 +50,13 @@ namespace Config {
 		SHOW_HOUSES,
 		SHOW_SHADE,
 		SHOW_SPECIAL_TILES,
+		SHOW_ZONE_AREAS,
 		HIGHLIGHT_ITEMS,
 		SHOW_ITEMS,
 		SHOW_BLOCKING,
 		SHOW_TOOLTIPS,
 		SHOW_PREVIEW,
 		SHOW_WALL_HOOKS,
-		SHOW_PICKUPABLES,
-		SHOW_MOVEABLES,
 		SHOW_AS_MINIMAP,
 		SHOW_ONLY_TILEFLAGS,
 		SHOW_ONLY_MODIFIED_TILES,
@@ -135,6 +133,7 @@ namespace Config {
 		INDIRECTORY_INSTALLATION,
 		AUTOCHECK_FOR_UPDATES,
 		ONLY_ONE_INSTANCE,
+		SHOW_TILESET_EDITOR,
 
 		PALETTE_LAYOUT,
 		MINIMAP_VISIBLE,
@@ -142,8 +141,7 @@ namespace Config {
 		MINIMAP_UPDATE_DELAY,
 		MINIMAP_VIEW_BOX,
 		MINIMAP_EXPORT_DIR,
-		ACTIONS_HISTORY_VISIBLE,
-		ACTIONS_HISTORY_LAYOUT,
+		TILESET_EXPORT_DIR,
 		WINDOW_HEIGHT,
 		WINDOW_WIDTH,
 		WINDOW_MAXIMIZED,
@@ -162,12 +160,26 @@ namespace Config {
 		SHOW_TOOLBAR_BRUSHES,
 		SHOW_TOOLBAR_POSITION,
 		SHOW_TOOLBAR_SIZES,
-		SHOW_TOOLBAR_INDICATORS,
 		TOOLBAR_STANDARD_LAYOUT,
 		TOOLBAR_BRUSHES_LAYOUT,
 		TOOLBAR_POSITION_LAYOUT,
 		TOOLBAR_SIZES_LAYOUT,
-		TOOLBAR_INDICATORS_LAYOUT,
+
+		// add new settings at the end to make sure nothing gets misread
+		DRAW_LOCKED_DOOR,
+		HIGHLIGHT_LOCKED_DOORS,
+		PALETTE_COLLECTION_STYLE,
+		USE_LARGE_COLLECTION_TOOLBAR,
+		SHOW_LIGHTS,
+		SHOW_LIGHT_STR,
+		SHOW_TECHNICAL_ITEMS,
+		SHOW_WAYPOINTS,
+
+		EXPERIMENTAL_FOG,
+
+		SHOW_TOWNS,
+		ALWAYS_SHOW_ZONES,
+		EXT_HOUSE_SHADER,
 
 		LAST,
 	};
@@ -190,7 +202,9 @@ public:
 	void setString(uint32_t key, std::string newval);
 
 	wxConfigBase& getConfigObject();
-	void setDefaults() { IO(DEFAULT); }
+	void setDefaults() {
+		IO(DEFAULT);
+	}
 	void load();
 	void save(bool endoftheworld = false);
 
@@ -203,27 +217,42 @@ public:
 	};
 	class DynamicValue {
 	public:
-		DynamicValue() : type(TYPE_NONE) {
+		DynamicValue() :
+			type(TYPE_NONE) {
 			intval = 0;
 		};
-		DynamicValue(DynamicType t) : type(t) {
-			if(t == TYPE_STR) strval = nullptr;
-			else if(t == TYPE_INT) intval = 0;
-			else if(t == TYPE_FLOAT) floatval = 0.0;
-			else intval = 0;
+		DynamicValue(DynamicType t) :
+			type(t) {
+			if (t == TYPE_STR) {
+				strval = nullptr;
+			} else if (t == TYPE_INT) {
+				intval = 0;
+			} else if (t == TYPE_FLOAT) {
+				floatval = 0.0;
+			} else {
+				intval = 0;
+			}
 		};
 		~DynamicValue() {
-			if(type == TYPE_STR)
+			if (type == TYPE_STR) {
 				delete strval;
+			}
 		}
-		DynamicValue(const DynamicValue& dv) : type(dv.type) {
-			if(dv.type == TYPE_STR) strval = newd std::string(*dv.strval);
-			else if(dv.type == TYPE_INT) intval = dv.intval;
-			else if(dv.type == TYPE_FLOAT) floatval = dv.floatval;
-			else intval = 0;
+		DynamicValue(const DynamicValue& dv) :
+			type(dv.type) {
+			if (dv.type == TYPE_STR) {
+				strval = newd std::string(*dv.strval);
+			} else if (dv.type == TYPE_INT) {
+				intval = dv.intval;
+			} else if (dv.type == TYPE_FLOAT) {
+				floatval = dv.floatval;
+			} else {
+				intval = 0;
+			}
 		};
 
 		std::string str();
+
 	private:
 		DynamicType type;
 		union {
@@ -234,6 +263,7 @@ public:
 
 		friend class Settings;
 	};
+
 private:
 	enum IOMode {
 		DEFAULT,

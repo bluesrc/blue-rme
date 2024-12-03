@@ -15,17 +15,17 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_EDITOR_TABS_H_
-#define BLUERME_EDITOR_TABS_H_
+#ifndef RME_EDITOR_TABS_H_
+#define RME_EDITOR_TABS_H_
 
 #include "gui_ids.h"
 
 class EditorTab;
 
-class MapTabbook : public wxPanel
-{
+class MapTabbook : public wxPanel {
 public:
 	MapTabbook(wxWindow* parent, wxWindowID id);
+	~MapTabbook();
 
 	// Wrapper functions
 	void AddTab(EditorTab* tab, bool select);
@@ -51,13 +51,10 @@ protected:
 	wxAuiNotebook* notebook;
 	std::map<wxWindow*, EditorTab*> conv;
 
-	friend class MapTab;
-
 	DECLARE_EVENT_TABLE();
 };
 
-class EditorTab
-{
+class EditorTab {
 public:
 	EditorTab();
 	virtual ~EditorTab();
@@ -67,7 +64,7 @@ public:
 	virtual wxString GetTitle() const = 0;
 
 	//
-	virtual void OnSwitchEditorMode(EditorMode mode) {}
+	virtual void OnSwitchEditorMode(EditorMode mode) { }
 };
 
 #endif

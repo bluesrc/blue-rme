@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_HOUSE_H_
-#define BLUERME_HOUSE_H_
+#ifndef RME_HOUSE_H_
+#define RME_HOUSE_H_
 
 #include "position.h"
 
@@ -26,10 +26,17 @@ class Door;
 
 class Houses;
 
-class House
-{
+class House {
 public:
 	House(Map& map);
+	~House();
+
+	uint32_t getID() const {
+		return id;
+	}
+	void setID(uint32_t newId) {
+		this->id = newId;
+	}
 
 	void clean();
 	void addTile(Tile* tile);
@@ -37,18 +44,22 @@ public:
 	size_t size() const;
 	std::string getDescription();
 
-	uint32_t id;
 	int rent;
-	//HouseDoorList doorList;
+	// HouseDoorList doorList;
 	std::string name;
 	uint32_t townid;
 	bool guildhall;
 
 	void setExit(const Position& pos);
 	void setExit(Map* map, const Position& pos);
-	const Position& getExit() const noexcept { return exit; }
+	Position getExit() const {
+		return exit;
+	}
 	uint8_t getEmptyDoorID() const;
 	Position getDoorPositionByID(uint8_t id) const;
+
+private:
+	uint32_t id;
 
 protected:
 	Map* map;
@@ -65,24 +76,42 @@ public:
 	Houses(Map& map);
 	~Houses();
 
-	uint32_t count() const { return houses.size(); }
+	uint32_t count() const {
+		return houses.size();
+	}
 
-	HouseMap::iterator begin() { return houses.begin(); }
-	HouseMap::iterator end() { return houses.end(); }
-	HouseMap::const_iterator begin() const { return houses.begin(); }
-	HouseMap::const_iterator end() const { return houses.end(); }
+	HouseMap::iterator begin() {
+		return houses.begin();
+	}
+	HouseMap::iterator end() {
+		return houses.end();
+	}
+	HouseMap::const_iterator begin() const {
+		return houses.begin();
+	}
+	HouseMap::const_iterator end() const {
+		return houses.end();
+	}
 #ifdef __VISUALC__ // C++0x compliance to some degree :)
-	HouseMap::iterator erase(HouseMap::iterator iter) { return houses.erase(iter); }
+	HouseMap::iterator erase(HouseMap::iterator iter) {
+		return houses.erase(iter);
+	}
 #else
-	void erase(HouseMap::iterator iter) { houses.erase(iter); }
+	void erase(HouseMap::iterator iter) {
+		houses.erase(iter);
+	}
 #endif
-	HouseMap::iterator find(uint32_t val) { return houses.find(val); }
+	HouseMap::iterator find(uint32_t val) {
+		return houses.find(val);
+	}
 
 	void removeHouse(House* house_to_remove);
+	void changeId(House* house, uint32_t newID);
 	void addHouse(House* new_house);
 	House* getHouse(uint32_t houseid);
 	const House* getHouse(uint32_t houseid) const;
 	uint32_t getEmptyID();
+
 protected:
 	Map& map;
 	uint32_t max_house_id;

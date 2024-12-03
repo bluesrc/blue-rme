@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_OTMM_IOMAP_H_
-#define BLUERME_OTMM_IOMAP_H_
+#ifndef RME_OTMM_IOMAP_H_
+#define RME_OTMM_IOMAP_H_
 
 #include "iomap.h"
 

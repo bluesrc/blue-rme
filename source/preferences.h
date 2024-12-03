@@ -15,20 +15,19 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-
-#ifndef BLUERME_PREFERENCES_WINDOW_H_
-#define BLUERME_PREFERENCES_WINDOW_H_
+#ifndef RME_PREFERENCES_WINDOW_H_
+#define RME_PREFERENCES_WINDOW_H_
 
 #include "main.h"
 #include <wx/listbook.h>
 #include <wx/collpane.h>
 #include <wx/clrpicker.h>
 
-class PreferencesWindow : public wxDialog
-{
+class PreferencesWindow : public wxDialog {
 public:
-	explicit PreferencesWindow(wxWindow* parent) : PreferencesWindow(parent, false) {};
-    PreferencesWindow(wxWindow* parent, bool clientVersionSelected);
+	explicit PreferencesWindow(wxWindow* parent) :
+		PreferencesWindow(parent, false) {};
+	PreferencesWindow(wxWindow* parent, bool clientVersionSelected);
 	virtual ~PreferencesWindow();
 
 	void OnClickDefaults(wxCommandEvent&);
@@ -50,6 +49,7 @@ protected:
 	wxCheckBox* update_check_on_startup_chkbox;
 	wxCheckBox* only_one_instance_chkbox;
 	wxCheckBox* show_welcome_dialog_chkbox;
+	wxCheckBox* enable_tileset_editing_chkbox;
 	wxSpinCtrl* undo_size_spin;
 	wxSpinCtrl* undo_mem_size_spin;
 	wxSpinCtrl* worker_threads_spin;
@@ -88,11 +88,13 @@ protected:
 
 	// Interface
 	wxChoice* terrain_palette_style_choice;
+	wxChoice* collection_palette_style_choice;
 	wxChoice* doodad_palette_style_choice;
 	wxChoice* item_palette_style_choice;
 	wxChoice* raw_palette_style_choice;
 
 	wxCheckBox* large_terrain_tools_chkbox;
+	wxCheckBox* large_collection_tools_chkbox;
 	wxCheckBox* large_doodad_sizebar_chkbox;
 	wxCheckBox* large_item_sizebar_chkbox;
 	wxCheckBox* large_house_sizebar_chkbox;

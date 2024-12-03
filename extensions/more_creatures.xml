@@ -135,13 +135,13 @@
 			<creature name="Death Blob" />
 			<creature name="Death Priest" />
 			<creature name="Deathling Scout" />
-			<creature name="Deathling Movesinger" />
+			<creature name="Deathling Spellsinger" />
 			<creature name="Deepling Brawler" />
 			<creature name="Deepling Elite" />
 			<creature name="Deepling Guard" />
 			<creature name="Deepling Master Librarian" />
 			<creature name="Deepling Scout" />
-			<creature name="Deepling Movesinger" />
+			<creature name="Deepling Spellsinger" />
 			<creature name="Deepling Tyrant" />
 			<creature name="Deepling Warrior" />
 			<creature name="Deepling Worker" />
@@ -171,7 +171,7 @@
 			<creature name="Dragonling" />
 			<creature name="Draken Abomination" />
 			<creature name="Draken Elite" />
-			<creature name="Draken Moveweaver" />
+			<creature name="Draken Spellweaver" />
 			<creature name="Draken Warmaster" />
 			<creature name="Draptor" />
 			<creature name="Dread Intruder" />
@@ -949,7 +949,7 @@
 			<creature name="The Snapper" />
 			<creature name="The Souldespoiler" />
 			<creature name="The Source Of Corruption" />
-			<creature name="The Movestealer" />
+			<creature name="The Spellstealer" />
 			<creature name="The Time Guardian" />
 			<creature name="The Unarmored Voidborn" />
 			<creature name="The Unwelcome" />
@@ -1217,7 +1217,7 @@
 			<creature name="Tremor Worm" />
 			<creature name="Troll Marauder" />
 			<creature name="Troll-Trained Salamander" />
-			<creature name="Ugly Pokemon" />
+			<creature name="Ugly Monster" />
 			<creature name="Unbeatable Dragon" />
 			<creature name="Unbound Blightwalker" />
 			<creature name="Unbound Defiler" />
@@ -1351,7 +1351,7 @@
 			<creature name="Stolen Knowledge Of Armor" />
 			<creature name="Stolen Knowledge Of Healing" />
 			<creature name="Stolen Knowledge Of Lifesteal" />
-			<creature name="Stolen Knowledge Of Moves" />
+			<creature name="Stolen Knowledge Of Spells" />
 			<creature name="Stolen Knowledge Of Summoning" />
 			<creature name="Stolen Soul" />
 			<creature name="Stolen Tome Of Portals" />

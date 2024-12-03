@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_DISPLAY_WINDOW_H_
-#define BLUERME_DISPLAY_WINDOW_H_
+#ifndef RME_DISPLAY_WINDOW_H_
+#define RME_DISPLAY_WINDOW_H_
 
 #include "action.h"
 #include "tile.h"
@@ -29,8 +29,7 @@ class MapPopupMenu;
 class AnimationTimer;
 class MapDrawer;
 
-class MapCanvas : public wxGLCanvas
-{
+class MapCanvas : public wxGLCanvas {
 public:
 	MapCanvas(MapWindow* parent, Editor& editor, int* attriblist);
 	virtual ~MapCanvas();
@@ -38,7 +37,7 @@ public:
 
 	// All events
 	void OnPaint(wxPaintEvent& event);
-	void OnEraseBackground(wxEraseEvent& event) {}
+	void OnEraseBackground(wxEraseEvent& event) { }
 
 	void OnMouseMove(wxMouseEvent& event);
 	void OnMouseLeftRelease(wxMouseEvent& event);
@@ -75,7 +74,6 @@ public:
 	void OnDelete(wxCommandEvent& event);
 	// ----
 	void OnGotoDestination(wxCommandEvent& event);
-	void OnCopyDestination(wxCommandEvent& event);
 	void OnRotateItem(wxCommandEvent& event);
 	void OnSwitchDoor(wxCommandEvent& event);
 	// ----
@@ -89,13 +87,17 @@ public:
 	void OnSelectCreatureBrush(wxCommandEvent& event);
 	void OnSelectSpawnBrush(wxCommandEvent& event);
 	void OnSelectHouseBrush(wxCommandEvent& event);
+	void OnSelectCollectionBrush(wxCommandEvent& event);
+	void OnSelectMoveTo(wxCommandEvent& event);
 	// ---
 	void OnProperties(wxCommandEvent& event);
 
 	void Refresh();
 
 	void ScreenToMap(int screen_x, int screen_y, int* map_x, int* map_y);
-	void MouseToMap(int* map_x, int* map_y) { ScreenToMap(cursor_x, cursor_y, map_x, map_y); }
+	void MouseToMap(int* map_x, int* map_y) {
+		ScreenToMap(cursor_x, cursor_y, map_x, map_y);
+	}
 	void GetScreenCenter(int* map_x, int* map_y);
 
 	void StartPasting();
@@ -107,35 +109,40 @@ public:
 	void UpdateZoomStatus();
 
 	void ChangeFloor(int new_floor);
-	int GetFloor() const noexcept { return floor; }
-	double GetZoom() const noexcept { return zoom; }
+	int GetFloor() const {
+		return floor;
+	}
+	double GetZoom() const {
+		return zoom;
+	}
 	void SetZoom(double value);
 	void GetViewBox(int* view_scroll_x, int* view_scroll_y, int* screensize_x, int* screensize_y) const;
 
-	MapWindow* GetMapWindow() const;
 	Position GetCursorPosition() const;
 
-	void ShowPositionIndicator(const Position& position);
 	void TakeScreenshot(wxFileName path, wxString format);
 
 protected:
 	void getTilesToDraw(int mouse_map_x, int mouse_map_y, int floor, PositionVector* tilestodraw, PositionVector* tilestoborder, bool fill = false);
-	bool floodFill(Map *map, const Position& center, int x, int y, GroundBrush* brush, PositionVector* positions);
+	bool floodFill(Map* map, const Position& center, int x, int y, GroundBrush* brush, PositionVector* positions);
 
 private:
 	enum {
-		BLOCK_SIZE = 64
+		BLOCK_SIZE = 100
 	};
 
-	inline int getFillIndex(int x, int y) const noexcept { return ((y % BLOCK_SIZE) * BLOCK_SIZE) + (x % BLOCK_SIZE); }
+	inline int getFillIndex(int x, int y) const {
+		return x + BLOCK_SIZE * y;
+	}
 
-	static bool processed[BLOCK_SIZE*BLOCK_SIZE];
+	static bool processed[BLOCK_SIZE * BLOCK_SIZE];
 
 	Editor& editor;
-	MapDrawer *drawer;
+	MapDrawer* drawer;
 	int keyCode;
+	int countMaxFills = 0;
 
-// View related
+	// View related
 	int floor;
 	double zoom;
 	int cursor_x;
@@ -196,17 +203,17 @@ protected:
 	Editor& editor;
 };
 
-class AnimationTimer : public wxTimer
-{
+class AnimationTimer : public wxTimer {
 public:
-	AnimationTimer(MapCanvas *canvas);
+	AnimationTimer(MapCanvas* canvas);
+	~AnimationTimer();
 
 	void Notify();
 	void Start();
 	void Stop();
 
 private:
-	MapCanvas *map_canvas;
+	MapCanvas* map_canvas;
 	bool started;
 };
 

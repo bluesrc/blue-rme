@@ -15,25 +15,37 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_TOWN_H_
-#define BLUERME_TOWN_H_
+#ifndef RME_TOWN_H_
+#define RME_TOWN_H_
 
 #include "position.h"
 
-class Town
-{
+class Town {
 public:
-	Town(uint32_t _id) : id(_id), name("") {}
-	Town(const Town& copy) : id(copy.id), name(copy.name), templepos(copy.templepos) {}
+	Town(uint32_t _id) :
+		id(_id), name("") { }
+	Town(const Town& copy) :
+		id(copy.id), name(copy.name), templepos(copy.templepos) { }
+	~Town() { }
 
-	const std::string& getName() const noexcept { return name; }
-	void setName(const std::string& _name) noexcept { name = _name; }
+	const std::string& getName() const {
+		return name;
+	}
+	void setName(const std::string& newName) {
+		name = newName;
+	}
 
-	const Position& getTemplePosition() const noexcept { return templepos; }
-	void setTemplePosition(const Position& position);
+	const Position& getTemplePosition() const {
+		return templepos;
+	}
+	void setTemplePosition(const Position& _pos);
 
-	uint32_t getID() const noexcept { return id; }
-	void setID(uint32_t _id) noexcept { id = _id; }
+	uint32_t getID() const {
+		return id;
+	}
+	void setID(uint32_t _id) {
+		id = _id;
+	}
 
 private:
 	uint32_t id;
@@ -43,8 +55,7 @@ private:
 
 typedef std::map<uint32_t, Town*> TownMap;
 
-class Towns
-{
+class Towns {
 public:
 	Towns();
 	~Towns();
@@ -52,7 +63,9 @@ public:
 	// Clears the townmap
 	void clear();
 
-	uint32_t count() const noexcept { return towns.size(); }
+	uint32_t count() const {
+		return towns.size();
+	}
 
 	bool addTown(Town* town);
 	uint32_t getEmptyID();
@@ -60,16 +73,32 @@ public:
 	Town* getTown(std::string& townname);
 	Town* getTown(uint32_t _townid);
 
-	TownMap::const_iterator begin() const noexcept { return towns.begin(); }
-	TownMap::const_iterator end() const noexcept { return towns.end(); }
-	TownMap::const_iterator find(uint32_t id) const { return towns.find(id); }
-	TownMap::iterator begin() noexcept { return towns.begin(); }
-	TownMap::iterator end() noexcept { return towns.end(); }
-	TownMap::iterator find(uint32_t id) { return towns.find(id); }
+	TownMap::const_iterator begin() const {
+		return towns.begin();
+	}
+	TownMap::const_iterator end() const {
+		return towns.end();
+	}
+	TownMap::const_iterator find(uint32_t id) const {
+		return towns.find(id);
+	}
+	TownMap::iterator begin() {
+		return towns.begin();
+	}
+	TownMap::iterator end() {
+		return towns.end();
+	}
+	TownMap::iterator find(uint32_t id) {
+		return towns.find(id);
+	}
 #ifdef __VISUALC__ // C++0x compliance to some degree :)
-	TownMap::iterator erase(TownMap::iterator iter) noexcept { return towns.erase(iter); }
+	TownMap::iterator erase(TownMap::iterator iter) {
+		return towns.erase(iter);
+	}
 #else
-	void erase(TownMap::iterator iter) { towns.erase(iter); }
+	void erase(TownMap::iterator iter) {
+		towns.erase(iter);
+	}
 #endif
 
 private:

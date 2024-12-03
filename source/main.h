@@ -15,44 +15,50 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MAIN_H_
-#define BLUERME_MAIN_H_
+#ifndef RME_MAIN_H_
+#define RME_MAIN_H_
 
 #ifdef _WIN32
-#	define WIN32_LEAN_AND_MEAN
-#	ifdef _WIN32_WINNT
-#		undef _WIN32_WINNT
-#	endif
-#	define _WIN32_WINNT 0x0501
+	#define WIN32_LEAN_AND_MEAN
+	#ifdef _WIN32_WINNT
+		#undef _WIN32_WINNT
+	#endif
+	#define _WIN32_WINNT 0x0501
 #endif
 
 #ifdef DEBUG_MEM
 
-#define _CRTDBG_MAP_ALLOC
+	#define _CRTDBG_MAP_ALLOC
 
-#pragma warning(disable: 4291)
-_Ret_bytecap_(_Size) inline void * __CRTDECL operator new(size_t _Size, const char* file, int line)
-        { return ::operator new(_Size, _NORMAL_BLOCK, file, line); }
-_Ret_bytecap_(_Size) inline void* __CRTDECL operator new[](size_t _Size, const char* file, int line)
-        { return ::operator new[](_Size, _NORMAL_BLOCK, file, line); }
-#define newd new(__FILE__, __LINE__)
+	#include <stdlib.h>
+	#include <crtdbg.h>
+
+	#pragma warning(disable : 4291)
+_Ret_bytecap_(_Size) inline void* __CRTDECL operator new(size_t _Size, const char* file, int line) {
+	return ::operator new(_Size, _NORMAL_BLOCK, file, line);
+}
+_Ret_bytecap_(_Size) inline void* __CRTDECL operator new[](size_t _Size, const char* file, int line) {
+	return ::operator new[](_Size, _NORMAL_BLOCK, file, line);
+}
+	#define newd new (__FILE__, __LINE__)
 
 #else
 
-#define newd new
+	#define newd new
 
 #endif
+
+// Boost libraries
+#include <boost/utility.hpp>
+#include <boost/range/adaptor/reversed.hpp>
+#include <boost/asio.hpp>
 
 #include <wx/defs.h>
 #include "definitions.h"
 
-#include <asio.hpp>
-#include <fmt/core.h>
-#include <nlohmann/json.hpp>
-
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
-#   include <wx/wx.h>
+	#include <wx/wx.h>
 #endif
 #include <wx/thread.h>
 #include <wx/utils.h>
@@ -83,9 +89,9 @@ _Ret_bytecap_(_Size) inline void* __CRTDECL operator new[](size_t _Size, const c
 #include "ext/pugixml.hpp"
 
 // Libarchive, for OTGZ
-#if OTGZ_SUPPORT > 0
-#include <archive.h>
-#include <archive_entry.h>
+#ifdef OTGZ_SUPPORT
+	#include <archive.h>
+	#include <archive_entry.h>
 #endif
 
 // This has annoyed me one time too many
@@ -94,9 +100,9 @@ _Ret_bytecap_(_Size) inline void* __CRTDECL operator new[](size_t _Size, const c
 #include <assert.h>
 #define _MSG(msg) !bool(msg)
 #ifdef __DEBUG__
-#   define ASSERT assert
+	#define ASSERT assert
 #else
-#   define ASSERT(...)
+	#define ASSERT(...)
 #endif
 
 // The complete STL ?, well, almost ;)
@@ -115,30 +121,24 @@ _Ret_bytecap_(_Size) inline void* __CRTDECL operator new[](size_t _Size, const c
 #include <set>
 #include <queue>
 #include <stdexcept>
-#include <stdlib.h>
-#include <crtdbg.h>
 #include <time.h>
 #include <fstream>
-#include <memory>
-#include <exception>
-#include <cmath>
-#include <ranges>
-#include <regex>
 
 typedef std::vector<std::string> StringVector;
 typedef wxFileName FileName;
+
+#include "json.h"
 
 #include "con_vector.h"
 #include "common.h"
 #include "threads.h"
 
-#include "const.h"
-#include "bluerme_forward_declarations.h"
+#include "rme_forward_declarations.h"
 
 #if wxCHECK_VERSION(3, 1, 0)
-        #define FROM_DIP(widget, size) widget->FromDIP(size)
+	#define FROM_DIP(widget, size) widget->FromDIP(size)
 #else
-        #define FROM_DIP(widget, size) size
+	#define FROM_DIP(widget, size) size
 #endif
 
 #endif

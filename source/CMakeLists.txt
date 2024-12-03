@@ -1,7 +1,6 @@
-set(rme_H
+set(bluerme_H
 ${CMAKE_CURRENT_LIST_DIR}/about_window.h
 ${CMAKE_CURRENT_LIST_DIR}/action.h
-${CMAKE_CURRENT_LIST_DIR}/actions_history_window.h
 ${CMAKE_CURRENT_LIST_DIR}/application.h
 ${CMAKE_CURRENT_LIST_DIR}/artprovider.h
 ${CMAKE_CURRENT_LIST_DIR}/basemap.h
@@ -14,7 +13,6 @@ ${CMAKE_CURRENT_LIST_DIR}/common.h
 ${CMAKE_CURRENT_LIST_DIR}/common_windows.h
 ${CMAKE_CURRENT_LIST_DIR}/complexitem.h
 ${CMAKE_CURRENT_LIST_DIR}/con_vector.h
-${CMAKE_CURRENT_LIST_DIR}/const.h
 ${CMAKE_CURRENT_LIST_DIR}/container_properties_window.h
 ${CMAKE_CURRENT_LIST_DIR}/copybuffer.h
 ${CMAKE_CURRENT_LIST_DIR}/creature.h
@@ -43,6 +41,7 @@ ${CMAKE_CURRENT_LIST_DIR}/iomap_otbm.h
 ${CMAKE_CURRENT_LIST_DIR}/item.h
 ${CMAKE_CURRENT_LIST_DIR}/item_attributes.h
 ${CMAKE_CURRENT_LIST_DIR}/items.h
+${CMAKE_CURRENT_LIST_DIR}/json.h
 ${CMAKE_CURRENT_LIST_DIR}/light_drawer.h
 ${CMAKE_CURRENT_LIST_DIR}/live_action.h
 ${CMAKE_CURRENT_LIST_DIR}/live_client.h
@@ -104,10 +103,9 @@ ${CMAKE_CURRENT_LIST_DIR}/waypoints.h
 ${CMAKE_CURRENT_LIST_DIR}/welcome_dialog.h
 )
 
-set(rme_SRC
+set(bluerme_SRC
 ${CMAKE_CURRENT_LIST_DIR}/about_window.cpp
 ${CMAKE_CURRENT_LIST_DIR}/action.cpp
-${CMAKE_CURRENT_LIST_DIR}/actions_history_window.cpp
 ${CMAKE_CURRENT_LIST_DIR}/application.cpp
 ${CMAKE_CURRENT_LIST_DIR}/artprovider.cpp
 ${CMAKE_CURRENT_LIST_DIR}/basemap.cpp
@@ -200,4 +198,7 @@ ${CMAKE_CURRENT_LIST_DIR}/wall_brush.cpp
 ${CMAKE_CURRENT_LIST_DIR}/waypoint_brush.cpp
 ${CMAKE_CURRENT_LIST_DIR}/waypoints.cpp
 ${CMAKE_CURRENT_LIST_DIR}/welcome_dialog.cpp
+${CMAKE_CURRENT_LIST_DIR}/json/json_spirit_reader.cpp
+${CMAKE_CURRENT_LIST_DIR}/json/json_spirit_value.cpp
+${CMAKE_CURRENT_LIST_DIR}/json/json_spirit_writer.cpp
 )

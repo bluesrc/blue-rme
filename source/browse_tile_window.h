@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_BROWSE_TILE_WINDOW_H_
-#define BLUERME_BROWSE_TILE_WINDOW_H_
+#ifndef RME_BROWSE_TILE_WINDOW_H_
+#define RME_BROWSE_TILE_WINDOW_H_
 
 #include "main.h"
 #include "map.h"
@@ -24,8 +24,7 @@
 
 class BrowseTileListBox;
 
-class BrowseTileWindow : public wxDialog
-{
+class BrowseTileWindow : public wxDialog {
 public:
 	BrowseTileWindow(wxWindow* parent, Tile* tile, wxPoint position = wxDefaultPosition);
 	~BrowseTileWindow();
@@ -46,4 +45,3 @@ protected:
 };
 
 #endif
-

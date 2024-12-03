@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MATERIALS_H_
-#define BLUERME_MATERIALS_H_
+#ifndef RME_MATERIALS_H_
+#define RME_MATERIALS_H_
 
 #include "extension.h"
 
@@ -35,9 +35,17 @@ public:
 	bool loadMaterials(const FileName& identifier, wxString& error, wxArrayString& warnings);
 	bool loadExtensions(FileName identifier, wxString& error, wxArrayString& warnings);
 	void createOtherTileset();
+	void addToTileset(std::string tilesetName, int itemId, TilesetCategoryType categoryType);
 
 	bool isInTileset(Item* item, std::string tileset) const;
 	bool isInTileset(Brush* brush, std::string tileset) const;
+	bool needSave() const {
+		return modified;
+	}
+
+	void modify(bool newValue = true) {
+		this->modified = newValue;
+	}
 
 protected:
 	bool unserializeMaterials(const FileName& filename, pugi::xml_node node, wxString& error, wxArrayString& warnings);
@@ -46,6 +54,7 @@ protected:
 	MaterialsExtensionList extensions;
 
 private:
+	bool modified = false;
 	Materials(const Materials&);
 	Materials& operator=(const Materials&);
 };

@@ -15,14 +15,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_EXTENSION_H_
-#define BLUERME_EXTENSION_H_
+#ifndef RME_EXTENSION_H_
+#define RME_EXTENSION_H_
 
 #include "tileset.h"
 #include "client_version.h"
 
-class MaterialsExtension
-{
+class MaterialsExtension {
 public:
 	MaterialsExtension(std::string name, std::string author, std::string description);
 	~MaterialsExtension();

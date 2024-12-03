@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_THREAD_H_
-#define BLUERME_THREAD_H_
+#ifndef RME_THREAD_H_
+#define RME_THREAD_H_
 
 #include "main.h"
 
@@ -29,15 +29,18 @@ public:
 
 class JoinableThread : public Thread {
 public:
-	JoinableThread() : Thread(wxTHREAD_JOINABLE) {}
+	JoinableThread() :
+		Thread(wxTHREAD_JOINABLE) { }
 };
 
 class DetachedThread : public Thread {
 public:
-	DetachedThread() : Thread(wxTHREAD_DETACHED) {}
+	DetachedThread() :
+		Thread(wxTHREAD_DETACHED) { }
 };
 
-inline Thread::Thread(wxThreadKind kind) : wxThread(kind) {}
+inline Thread::Thread(wxThreadKind kind) :
+	wxThread(kind) { }
 
 inline void Thread::Execute() {
 	Create();

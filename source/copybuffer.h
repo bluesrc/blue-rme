@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_COPYBUFFER_H_
-#define BLUERME_COPYBUFFER_H_
+#ifndef RME_COPYBUFFER_H_
+#define RME_COPYBUFFER_H_
 
 #include <wx/dataobj.h>
 
@@ -25,8 +25,7 @@
 
 class Editor;
 
-class CopyBuffer
-{
+class CopyBuffer {
 public:
 	CopyBuffer();
 	virtual ~CopyBuffer();

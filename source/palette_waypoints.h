@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_PALETTE_WAYPOINTS_H_
-#define BLUERME_PALETTE_WAYPOINTS_H_
+#ifndef RME_PALETTE_WAYPOINTS_H_
+#define RME_PALETTE_WAYPOINTS_H_
 
 #include <wx/listctrl.h>
 
@@ -46,6 +46,7 @@ public:
 	void OnSwitchIn();
 	// Called when this page is hidden
 	void OnSwitchOut();
+
 public:
 	// wxWidgets event handling
 	void OnClickWaypoint(wxListEvent& event);
@@ -55,6 +56,7 @@ public:
 	void OnClickRemoveWaypoint(wxCommandEvent& event);
 
 	void SetMap(Map* map);
+
 protected:
 	Map* map;
 	wxListCtrl* waypoint_list;

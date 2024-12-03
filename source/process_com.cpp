@@ -19,66 +19,56 @@
 
 #ifdef _USE_PROCESS_COM
 
-#include "gui.h"
-#include "process_com.h"
+	#include "gui.h"
+	#include "process_com.h"
 
+// Server
 
-//Server
-
-BLUERMEProcessServer::BLUERMEProcessServer()
-{
+RMEProcessServer::RMEProcessServer() {
 	////
 }
 
-BLUERMEProcessServer::~BLUERMEProcessServer()
-{
+RMEProcessServer::~RMEProcessServer() {
 	////
 }
 
-wxConnectionBase* BLUERMEProcessServer::OnAcceptConnection(const wxString& topic)
-{
-	if(topic.Lower() == "rme_talk") {
-		g_gui.root->Iconize(false); //Show application if minimized
-		g_gui.root->Raise(); //Request the window manager to raise this application to the top of Z-order
-		return newd BLUERMEProcessConnection();
+wxConnectionBase* RMEProcessServer::OnAcceptConnection(const wxString& topic) {
+	if (topic.Lower() == "rme_talk") {
+		g_gui.root->Iconize(false); // Show application if minimized
+		g_gui.root->Raise(); // Request the window manager to raise this application to the top of Z-order
+		return newd RMEProcessConnection();
 	}
 	return nullptr;
 }
 
+// Client
 
-//Client
-
-BLUERMEProcessClient::BLUERMEProcessClient() : proc(nullptr)
-{
+RMEProcessClient::RMEProcessClient() :
+	proc(nullptr) {
 	////
 }
 
-BLUERMEProcessClient::~BLUERMEProcessClient()
-{
+RMEProcessClient::~RMEProcessClient() {
 	delete proc;
 }
 
-wxConnectionBase* BLUERMEProcessClient::OnMakeConnection()
-{
-	return proc = newd BLUERMEProcessConnection();
+wxConnectionBase* RMEProcessClient::OnMakeConnection() {
+	return proc = newd RMEProcessConnection();
 }
 
+// Connection
 
-//Connection
-
-BLUERMEProcessConnection::BLUERMEProcessConnection() : wxConnection()
-{
+RMEProcessConnection::RMEProcessConnection() :
+	wxConnection() {
 	////
 }
 
-BLUERMEProcessConnection::~BLUERMEProcessConnection()
-{
+RMEProcessConnection::~RMEProcessConnection() {
 	////
 }
 
-bool BLUERMEProcessConnection::OnExec(const wxString& topic, const wxString& fileName)
-{
-	if(topic.Lower() == "rme_talk" && fileName != wxEmptyString) {
+bool RMEProcessConnection::OnExec(const wxString& topic, const wxString& fileName) {
+	if (topic.Lower() == "rme_talk" && fileName != wxEmptyString) {
 		g_gui.LoadMap(FileName(fileName));
 		return true;
 	}

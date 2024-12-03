@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MAP_TAB_H_
-#define BLUERME_MAP_TAB_H_
+#ifndef RME_MAP_TAB_H_
+#define RME_MAP_TAB_H_
 
 #include "editor_tabs.h"
 #include "application.h"

@@ -15,14 +15,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_LIGHDRAWER_H
-#define BLUERME_LIGHDRAWER_H
+#ifndef RME_LIGHDRAWER_H
+#define RME_LIGHDRAWER_H
 
 #include "graphics.h"
 #include "position.h"
 
-class LightDrawer
-{
+class LightDrawer {
 	struct Light {
 		uint16_t map_x = 0;
 		uint16_t map_y = 0;
@@ -34,10 +33,10 @@ public:
 	LightDrawer();
 	virtual ~LightDrawer();
 
-	void draw(int map_x, int map_y, int scroll_x, int scroll_y);
+	void draw(int map_x, int map_y, int end_x, int end_y, int scroll_x, int scroll_y, bool fog);
 
 	void setGlobalLightColor(uint8_t color);
-	void addLight(int map_x, int map_y, const SpriteLight& light);
+	void addLight(int map_x, int map_y, int map_z, const SpriteLight& light);
 	void clear() noexcept;
 
 private:
@@ -48,7 +47,7 @@ private:
 		int dx = map_x - light.map_x;
 		int dy = map_y - light.map_y;
 		float distance = std::sqrt(dx * dx + dy * dy);
-		if (distance > bluerme::MaxLightIntensity) {
+		if (distance > MaxLightIntensity) {
 			return 0.f;
 		}
 		float intensity = (-distance + light.intensity) * 0.2f;

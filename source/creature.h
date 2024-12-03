@@ -15,13 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_CREATURE_H_
-#define BLUERME_CREATURE_H_
+#ifndef RME_CREATURE_H_
+#define RME_CREATURE_H_
 
 #include "creatures.h"
 
-enum Direction
-{
+enum Direction {
 	NORTH = 0,
 	EAST = 1,
 	SOUTH = 2,
@@ -33,38 +32,52 @@ enum Direction
 
 IMPLEMENT_INCREMENT_OP(Direction)
 
-class Creature
-{
+class Creature {
 public:
-	Creature(CreatureType* type);
-	Creature(const std::string& type_name);
+	Creature(CreatureType* ctype);
+	Creature(std::string type_name);
+	~Creature();
+
+	// Static conversions
+	static std::string DirID2Name(uint16_t id);
+	static uint16_t DirName2ID(std::string id);
 
 	Creature* deepCopy() const;
 
 	const Outfit& getLookType() const;
 
-	bool isSaved() const noexcept { return saved; }
-	void save() noexcept { saved = true; }
-	void reset() noexcept { saved = false; }
+	bool isSaved();
+	void save();
+	void reset();
 
-	bool isSelected() const noexcept { return selected; }
-	void deselect() noexcept { selected = false; }
-	void select() noexcept { selected = true; }
+	bool isSelected() const {
+		return selected;
+	}
+	void deselect() {
+		selected = false;
+	}
+	void select() {
+		selected = true;
+	}
 
 	bool isNpc() const;
 
 	std::string getName() const;
 	CreatureBrush* getBrush() const;
 
-	int getSpawnTime() const noexcept { return spawntime; }
-	void setSpawnTime(int time) noexcept { spawntime = time; }
+	int getSpawnTime() const {
+		return spawntime;
+	}
+	void setSpawnTime(int spawntime) {
+		this->spawntime = spawntime;
+	}
 
-	Direction getDirection() const noexcept { return direction; }
-	void setDirection(Direction _direction) noexcept { direction = _direction; }
-
-	// Static conversions
-	static std::string DirID2Name(uint16_t id);
-	static uint16_t DirName2ID(std::string id);
+	Direction getDirection() const {
+		return direction;
+	}
+	void setDirection(Direction direction) {
+		this->direction = direction;
+	}
 
 protected:
 	std::string type_name;
@@ -73,6 +86,41 @@ protected:
 	bool saved;
 	bool selected;
 };
+
+inline void Creature::save() {
+	saved = true;
+}
+
+inline void Creature::reset() {
+	saved = false;
+}
+
+inline bool Creature::isSaved() {
+	return saved;
+}
+
+inline bool Creature::isNpc() const {
+	CreatureType* type = g_creatures[type_name];
+	if (type) {
+		return type->isNpc;
+	}
+	return false;
+}
+
+inline std::string Creature::getName() const {
+	CreatureType* type = g_creatures[type_name];
+	if (type) {
+		return type->name;
+	}
+	return "";
+}
+inline CreatureBrush* Creature::getBrush() const {
+	CreatureType* type = g_creatures[type_name];
+	if (type) {
+		return type->brush;
+	}
+	return nullptr;
+}
 
 typedef std::vector<Creature*> CreatureVector;
 typedef std::list<Creature*> CreatureList;

@@ -15,19 +15,18 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MAP_REGION_H
-#define BLUERME_MAP_REGION_H
+#ifndef RME_MAP_REGION_H
+#define RME_MAP_REGION_H
 
-#include "const.h"
 #include "position.h"
 
 class Tile;
 class Floor;
 class BaseMap;
 
-class TileLocation
-{
+class TileLocation {
 	TileLocation();
+
 public:
 	~TileLocation();
 
@@ -39,47 +38,86 @@ protected:
 	Position position;
 	size_t spawn_count;
 	size_t waypoint_count;
+	size_t town_count;
 	HouseExitList* house_exits; // Any house exits pointing here
 
 public:
-
 	// Access tile
 	// Can't set directly since that does not update tile count
-	Tile* get() noexcept { return tile; }
-	const Tile* get() const noexcept { return tile; }
+	Tile* get() {
+		return tile;
+	}
+	const Tile* get() const {
+		return tile;
+	}
 
 	int size() const;
 	bool empty() const;
 
-	const Position& getPosition() const noexcept { return position; }
-	int getX() const noexcept { return position.x; }
-	int getY() const noexcept { return position.y; }
-	int getZ() const noexcept { return position.z; }
+	Position getPosition() const {
+		return position;
+	}
 
-	size_t getSpawnCount() const noexcept { return spawn_count; }
-	void increaseSpawnCount() noexcept { spawn_count++; }
-	void decreaseSpawnCount() noexcept { spawn_count--; }
-	size_t getWaypointCount() const noexcept { return waypoint_count; }
-	void increaseWaypointCount() noexcept { waypoint_count++; }
-	void decreaseWaypointCount() noexcept { waypoint_count--; }
-	HouseExitList* createHouseExits();
-	HouseExitList* getHouseExits() noexcept { return house_exits; }
+	int getX() const {
+		return position.x;
+	}
+	int getY() const {
+		return position.y;
+	}
+	int getZ() const {
+		return position.z;
+	}
+
+	size_t getSpawnCount() const {
+		return spawn_count;
+	}
+	void increaseSpawnCount() {
+		spawn_count++;
+	}
+	void decreaseSpawnCount() {
+		spawn_count--;
+	}
+	size_t getWaypointCount() const {
+		return waypoint_count;
+	}
+	void increaseWaypointCount() {
+		waypoint_count++;
+	}
+	void decreaseWaypointCount() {
+		waypoint_count--;
+	}
+	size_t getTownCount() const {
+		return town_count;
+	}
+	void increaseTownCount() {
+		town_count++;
+	}
+	void decreaseTownCount() {
+		town_count--;
+	}
+	HouseExitList* createHouseExits() {
+		if (house_exits) {
+			return house_exits;
+		}
+		return house_exits = newd HouseExitList;
+	}
+	HouseExitList* getHouseExits() {
+		return house_exits;
+	}
 
 	friend class Floor;
 	friend class QTreeNode;
 	friend class Waypoints;
 };
 
-class Floor
-{
+class Floor {
 public:
 	Floor(int x, int y, int z);
-	TileLocation locs[bluerme::MapLayers];
+	TileLocation locs[MAP_LAYERS];
 };
 
 // This is not a QuadTree, but a HexTree (16 child nodes to every node), so the name is abit misleading
-class QTreeNode
-{
+class QTreeNode {
 public:
 	QTreeNode(BaseMap& map);
 	virtual ~QTreeNode();
@@ -119,13 +157,14 @@ protected:
 	uint32_t visible;
 
 	bool isLeaf;
-
 	union {
-		QTreeNode* child[bluerme::MapLayers];
-		Floor* array[bluerme::MapLayers];
-//#if 16 != bluerme::MapLayers
-//#    error "You need to rewrite the QuadTree in order to handle more or less than 16 floors"
-//#endif
+		QTreeNode* child[MAP_LAYERS];
+		Floor* array[MAP_LAYERS];
+		/*
+		#if 16 != MAP_LAYERS
+		#    error "You need to rewrite the QuadTree in order to handle more or less than 16 floors"
+		#endif
+		*/
 	};
 
 	friend class BaseMap;

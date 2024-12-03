@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_FIND_ITEM_WINDOW_H_
-#define BLUERME_FIND_ITEM_WINDOW_H_
+#ifndef RME_FIND_ITEM_WINDOW_H_
+#define RME_FIND_ITEM_WINDOW_H_
 
 #include <wx/radiobox.h>
 #include <wx/spinctrl.h>
@@ -29,8 +29,7 @@
 
 class FindDialogListBox;
 
-class FindItemDialog : public wxDialog
-{
+class FindItemDialog : public wxDialog {
 public:
 	enum SearchMode {
 		ServerIDs = 0,
@@ -49,14 +48,19 @@ public:
 		MagicField,
 		Teleport,
 		Bed,
-		Key
+		Key,
+		Podium
 	};
 
 	FindItemDialog(wxWindow* parent, const wxString& title, bool onlyPickupables = false);
 	~FindItemDialog();
 
-	Brush* getResult() const { return result_brush; }
-	uint16_t getResultID() const { return result_id; }
+	Brush* getResult() const {
+		return result_brush;
+	}
+	uint16_t getResultID() const {
+		return result_id;
+	}
 
 	SearchMode getSearchMode() const;
 	void setSearchMode(SearchMode mode);
@@ -98,6 +102,7 @@ private:
 	wxCheckBox* has_elevation;
 	wxCheckBox* ignore_look;
 	wxCheckBox* floor_change;
+	wxCheckBox* invalid_item;
 
 	FindDialogListBox* items_list;
 	wxStdDialogButtonSizer* buttons_box_sizer;
@@ -110,4 +115,4 @@ private:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif // BLUERME_FIND_ITEM_WINDOW_H_
+#endif // RME_FIND_ITEM_WINDOW_H_

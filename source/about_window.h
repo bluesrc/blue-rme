@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUEBLUERME_ABOUT_WINDOW_H_
-#define BLUEBLUERME_ABOUT_WINDOW_H_
+#ifndef RME_ABOUT_WINDOW_H_
+#define RME_ABOUT_WINDOW_H_
 
 #include "main.h"
 
@@ -32,6 +32,7 @@ public:
 
 	void OnTetris(wxCommandEvent&);
 	void OnSnake(wxCommandEvent&);
+
 private:
 	wxSizer* topsizer;
 	GamePanel* game_panel;

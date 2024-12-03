@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef _BLUERME_LIVE_TAB_H_
-#define _BLUERME_LIVE_TAB_H_
+#ifndef _RME_LIVE_TAB_H_
+#define _RME_LIVE_TAB_H_
 
 #include "main.h"
 
@@ -38,13 +38,19 @@ public:
 	void Message(const wxString& str);
 	void Chat(const wxString& speaker, const wxString& str);
 
-	virtual wxWindow* GetWindow() const { return (wxPanel*)this; }
+	virtual wxWindow* GetWindow() const {
+		return (wxPanel*)this;
+	}
 	virtual wxString GetTitle() const;
 
-	bool IsConnected() const { return socket != nullptr; }
+	bool IsConnected() const {
+		return socket != nullptr;
+	}
 	void Disconnect();
 
-	LiveSocket* GetSocket() { return socket; }
+	LiveSocket* GetSocket() {
+		return socket;
+	}
 
 	void UpdateClientList(const std::unordered_map<uint32_t, LivePeer*>& updatedClients);
 

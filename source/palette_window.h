@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_PALETTE_H_
-#define BLUERME_PALETTE_H_
+#ifndef RME_PALETTE_H_
+#define RME_PALETTE_H_
 
 #include "palette_common.h"
 
@@ -25,8 +25,7 @@ class CreaturePalettePanel;
 class HousePalettePanel;
 class WaypointPalettePanel;
 
-class PaletteWindow : public wxPanel
-{
+class PaletteWindow : public wxPanel {
 public:
 	PaletteWindow(wxWindow* parent, const TilesetContainer& tilesets);
 	~PaletteWindow();
@@ -67,6 +66,7 @@ protected:
 	static PalettePanel* CreateTerrainPalette(wxWindow* parent, const TilesetContainer& tilesets);
 	static PalettePanel* CreateDoodadPalette(wxWindow* parent, const TilesetContainer& tilesets);
 	static PalettePanel* CreateItemPalette(wxWindow* parent, const TilesetContainer& tilesets);
+	static PalettePanel* CreateCollectionPalette(wxWindow* parent, const TilesetContainer& tilesets);
 	static PalettePanel* CreateCreaturePalette(wxWindow* parent, const TilesetContainer& tilesets);
 	static PalettePanel* CreateHousePalette(wxWindow* parent, const TilesetContainer& tilesets);
 	static PalettePanel* CreateWaypointPalette(wxWindow* parent, const TilesetContainer& tilesets);
@@ -77,6 +77,7 @@ protected:
 	BrushPalettePanel* terrain_palette;
 	BrushPalettePanel* doodad_palette;
 	BrushPalettePanel* item_palette;
+	BrushPalettePanel* collection_palette;
 	CreaturePalettePanel* creature_palette;
 	HousePalettePanel* house_palette;
 	WaypointPalettePanel* waypoint_palette;

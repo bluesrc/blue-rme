@@ -15,8 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //////////////////////////////////////////////////////////////////////
 
-#ifndef BLUERME_MAP_WINDOWS_H_
-#define BLUERME_MAP_WINDOWS_H_
+#ifndef RME_MAP_WINDOWS_H_
+#define RME_MAP_WINDOWS_H_
 
 #include "main.h"
 
@@ -29,31 +29,28 @@ class MapTab;
 /**
  * A toggle button with an item on it.
  */
-class ItemToggleButton : public DCButton
-{
+class ItemToggleButton : public DCButton {
 public:
 	ItemToggleButton(wxWindow* parent, RenderSize size, int lookid, wxWindowID id = wxID_ANY) :
-		DCButton(parent, id, wxDefaultPosition, DC_BTN_TOGGLE, size, lookid) {}
-	virtual ~ItemToggleButton() {}
+		DCButton(parent, id, wxDefaultPosition, DC_BTN_TOGGLE, size, lookid) { }
+	virtual ~ItemToggleButton() { }
 };
 
 /**
  * A button with an item on it.
  */
-class ItemButton : public DCButton
-{
+class ItemButton : public DCButton {
 public:
 	ItemButton(wxWindow* parent, RenderSize size, uint16_t lookid, wxWindowID id = wxID_ANY) :
-		DCButton(parent, id, wxDefaultPosition, DC_BTN_NORMAL, size, lookid) {}
-	virtual ~ItemButton() {}
+		DCButton(parent, id, wxDefaultPosition, DC_BTN_NORMAL, size, lookid) { }
+	virtual ~ItemButton() { }
 };
 
 /**
  * The map properties window
  * Change map size, protocol etc.
  */
-class MapPropertiesWindow : public wxDialog
-{
+class MapPropertiesWindow : public wxDialog {
 public:
 	MapPropertiesWindow(wxWindow* parent, MapTab* tab, Editor& editor);
 	virtual ~MapPropertiesWindow();
@@ -83,8 +80,7 @@ protected:
  * The import map dialog
  * Allows selection of file path, offset and some weird options.
  */
-class ImportMapWindow : public wxDialog
-{
+class ImportMapWindow : public wxDialog {
 public:
 	ImportMapWindow(wxWindow* parent, Editor& editor);
 	virtual ~ImportMapWindow();
@@ -92,13 +88,13 @@ public:
 	void OnClickBrowse(wxCommandEvent&);
 	void OnClickOK(wxCommandEvent&);
 	void OnClickCancel(wxCommandEvent&);
+
 protected:
 	Editor& editor;
 
 	wxTextCtrl* file_text_field;
 	wxSpinCtrl* x_offset_ctrl;
 	wxSpinCtrl* y_offset_ctrl;
-	wxSpinCtrl* z_offset_ctrl;
 
 	wxChoice* house_options;
 	wxChoice* spawn_options;
@@ -109,8 +105,7 @@ protected:
 /**
  * The export minimap dialog, select output path and what floors to export.
  */
-class ExportMiniMapWindow : public wxDialog
-{
+class ExportMiniMapWindow : public wxDialog {
 public:
 	ExportMiniMapWindow(wxWindow* parent, Editor& editor);
 	virtual ~ExportMiniMapWindow();
@@ -127,7 +122,6 @@ protected:
 
 	Editor& editor;
 
-	wxChoice* format_options;
 	wxStaticText* error_field;
 	wxTextCtrl* directory_text_field;
 	wxTextCtrl* file_name_text_field;
@@ -139,14 +133,40 @@ protected:
 };
 
 /**
+ * The export tilesets dialog, select output path.
+ */
+class ExportTilesetsWindow : public wxDialog {
+public:
+	ExportTilesetsWindow(wxWindow* parent, Editor& editor);
+	virtual ~ExportTilesetsWindow();
+
+	void OnClickBrowse(wxCommandEvent&);
+	void OnDirectoryChanged(wxKeyEvent&);
+	void OnFileNameChanged(wxKeyEvent&);
+	void OnClickOK(wxCommandEvent&);
+	void OnClickCancel(wxCommandEvent&);
+
+protected:
+	void CheckValues();
+
+	Editor& editor;
+
+	wxStaticText* error_field;
+	wxTextCtrl* directory_text_field;
+	wxTextCtrl* file_name_text_field;
+	wxButton* ok_button;
+
+	DECLARE_EVENT_TABLE();
+};
+
+/**
  * Text control that will forward up/down pgup / pgdown keys to parent window
  */
-class KeyForwardingTextCtrl : public wxTextCtrl
-{
+class KeyForwardingTextCtrl : public wxTextCtrl {
 public:
-	KeyForwardingTextCtrl(wxWindow* parent, wxWindowID id, const wxString& value = "", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr)
-		: wxTextCtrl(parent, id, value, pos, size, style, validator, name) {}
-	~KeyForwardingTextCtrl() {}
+	KeyForwardingTextCtrl(wxWindow* parent, wxWindowID id, const wxString& value = "", const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxTextCtrlNameStr) :
+		wxTextCtrl(parent, id, value, pos, size, style, validator, name) { }
+	~KeyForwardingTextCtrl() { }
 
 	void OnKeyDown(wxKeyEvent&);
 
@@ -157,8 +177,7 @@ public:
  * The list inside a find dialog
  * Presents a list of brushes
  */
-class FindDialogListBox : public wxVListBox
-{
+class FindDialogListBox : public wxVListBox {
 public:
 	FindDialogListBox(wxWindow* parent, wxWindowID id);
 	~FindDialogListBox();
@@ -170,6 +189,7 @@ public:
 
 	void OnDrawItem(wxDC& dc, const wxRect& rect, size_t index) const;
 	wxCoord OnMeasureItem(size_t index) const;
+
 protected:
 	bool cleared;
 	bool no_matches;
@@ -177,15 +197,15 @@ protected:
 };
 
 /**
-* A wxListBox that can be sorted without using style wxLB_SORT.
-* wxLB_SORT does not work properly on Windows and causes errors on macOS.
-*/
-class SortableListBox : public wxListBox
-{
+ * A wxListBox that can be sorted without using style wxLB_SORT.
+ * wxLB_SORT does not work properly on Windows and causes errors on macOS.
+ */
+class SortableListBox : public wxListBox {
 public:
-	SortableListBox(wxWindow* parent, wxWindowID id, const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize);
+	SortableListBox(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
 	~SortableListBox();
 	void Sort();
+
 private:
 	void DoSort();
 };
@@ -195,8 +215,7 @@ private:
  * ShowModal will return 0 or the item id for item dialogs
  * 0 or 1 for brush dialogs
  */
-class FindDialog : public wxDialog
-{
+class FindDialog : public wxDialog {
 public:
 	FindDialog(wxWindow* parent, wxString title);
 	virtual ~FindDialog();
@@ -209,8 +228,13 @@ public:
 	void OnClickCancel(wxCommandEvent&);
 
 	void RefreshContents();
-	virtual const Brush* getResult() const { return result_brush; }
-	virtual int getResultID() const { return result_id; }
+	virtual const Brush* getResult() const {
+		return result_brush;
+	}
+	virtual int getResultID() const {
+		return result_id;
+	}
+
 protected:
 	virtual void RefreshContentsInternal() = 0;
 	virtual void OnClickListInternal(wxCommandEvent&) = 0;
@@ -229,8 +253,7 @@ protected:
  * Find a brush dialog
  * Find out what brush was returned through GetResult
  */
-class FindBrushDialog : public FindDialog
-{
+class FindBrushDialog : public FindDialog {
 public:
 	FindBrushDialog(wxWindow* parent, wxString title = "Jump to Brush");
 	virtual ~FindBrushDialog();
@@ -244,11 +267,10 @@ public:
  * Go to position dialog
  * Allows entry of 3 coordinates and goes there instantly
  */
-class GotoPositionDialog : public wxDialog
-{
+class GotoPositionDialog : public wxDialog {
 public:
 	GotoPositionDialog(wxWindow* parent, Editor& editor);
-	~GotoPositionDialog() {}
+	~GotoPositionDialog() { }
 
 	void OnClickOK(wxCommandEvent&);
 	void OnClickCancel(wxCommandEvent&);
@@ -265,21 +287,26 @@ protected:
  * There are two versions, one for otbmv4 maps and one for the old maps.
  * They are declared in old_properties_window / properties_window
  */
-class ObjectPropertiesWindowBase : public wxDialog
-{
+class ObjectPropertiesWindowBase : public wxDialog {
 public:
 	ObjectPropertiesWindowBase(
 		wxWindow* parent, wxString title,
 		const Map* map, const Tile* tile, Item* item,
-		wxPoint position = wxDefaultPosition);
+		wxPoint position = wxDefaultPosition
+	);
 	ObjectPropertiesWindowBase(
 		wxWindow* parent, wxString title,
 		const Map* map, const Tile* tile, Spawn* spawn,
-		wxPoint position = wxDefaultPosition);
+		wxPoint position = wxDefaultPosition
+	);
 	ObjectPropertiesWindowBase(
 		wxWindow* parent, wxString title,
 		const Map* map, const Tile* tile, Creature* creature,
-		wxPoint position = wxDefaultPosition);
+		wxPoint position = wxDefaultPosition
+	);
+	ObjectPropertiesWindowBase(
+		wxWindow* parent, wxString title, wxPoint position = wxDefaultPosition
+	);
 
 	Item* getItemBeingEdited();
 	Creature* getCreatureBeingEdited();
@@ -296,8 +323,7 @@ protected:
 /**
  * The edit towns dialog, ugly as sin.
  */
-class EditTownsDialog : public wxDialog
-{
+class EditTownsDialog : public wxDialog {
 public:
 	EditTownsDialog(wxWindow* parent, Editor& editor);
 	virtual ~EditTownsDialog();
@@ -308,8 +334,8 @@ public:
 	void OnClickRemove(wxCommandEvent&);
 	void OnClickOK(wxCommandEvent&);
 	void OnClickCancel(wxCommandEvent&);
-protected:
 
+protected:
 	void BuildListBox(bool doselect);
 	void UpdateSelection(int new_selection);
 
