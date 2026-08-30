@@ -468,15 +468,12 @@ void MapDrawer::DrawMap() {
 								r /= 2;
 								b /= 2;
 							}
-							if (options.show_special_tiles && tile->getMapFlags() & TILESTATE_PVPZONE) {
+							if (options.show_special_tiles && tile->getMapFlags() & TILESTATE_ARENAZONE) {
 								r = r / 3 * 2;
 								b = r / 3 * 2;
 							}
 							if (options.show_special_tiles && tile->getMapFlags() & TILESTATE_NOLOGOUT) {
 								b /= 2;
-							}
-							if (options.show_special_tiles && tile->getMapFlags() & TILESTATE_NOPVP) {
-								g /= 2;
 							}
 							if (options.show_zone_areas && tile->getMapFlags() & TILESTATE_ZONE_BRUSH) {
 								size_t zones = tile->getZoneIds().size();
@@ -1644,7 +1641,7 @@ void MapDrawer::DrawTile(TileLocation* location) {
 			b /= 2;
 		}
 
-		if (showspecial && tile->getMapFlags() & TILESTATE_PVPZONE) {
+		if (showspecial && tile->getMapFlags() & TILESTATE_ARENAZONE) {
 			g = r / 4;
 			b = b / 3 * 2;
 		}
@@ -1653,9 +1650,6 @@ void MapDrawer::DrawTile(TileLocation* location) {
 			b /= 2;
 		}
 
-		if (showspecial && tile->getMapFlags() & TILESTATE_NOPVP) {
-			g /= 2;
-		}
 
 		if (options.show_zone_areas && tile->getMapFlags() & TILESTATE_ZONE_BRUSH) {
 			size_t zones = tile->getZoneIds().size();

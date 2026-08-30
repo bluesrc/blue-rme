@@ -26,10 +26,9 @@
 #include "../icons/circular_6.xpm"
 #include "../icons/circular_7.xpm"
 #include "../icons/nologout_zone.xpm"
-#include "../icons/nopvp_zone.xpm"
 #include "../icons/position_go.xpm"
 #include "../icons/protected_zone.xpm"
-#include "../icons/pvp_zone.xpm"
+#include "../icons/arena_zone.xpm"
 #include "../icons/rectangular_1.xpm"
 #include "../icons/rectangular_2.xpm"
 #include "../icons/rectangular_3.xpm"
@@ -64,12 +63,10 @@ wxBitmap ArtProvider::CreateBitmap(const wxArtID& id, const wxArtClient& client,
 			return wxBitmap(circular_7_xpm);
 		} else if (id == ART_NOLOOUT_BRUSH) {
 			return wxBitmap(nologout_zone_xpm);
-		} else if (id == ART_NOPVP_BRUSH) {
-			return wxBitmap(nopvp_zone_xpm);
 		} else if (id == ART_POSITION_GO) {
 			return wxBitmap(position_go_xpm);
-		} else if (id == ART_PVP_BRUSH) {
-			return wxBitmap(pvp_zone_xpm);
+		} else if (id == ART_ARENA_BRUSH) {
+			return wxBitmap(arena_zone_xpm);
 		} else if (id == ART_PZ_BRUSH) {
 			return wxBitmap(protected_zone_xpm);
 		} else if (id == ART_RECTANGULAR) {

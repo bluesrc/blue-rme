@@ -245,9 +245,8 @@ public:
 	void OnClickArchwayDoorButton(wxCommandEvent& event);
 	// ----
 	void OnClickPZBrushButton(wxCommandEvent& event);
-	void OnClickNOPVPBrushButton(wxCommandEvent& event);
 	void OnClickNoLogoutBrushButton(wxCommandEvent& event);
-	void OnClickPVPZoneBrushButton(wxCommandEvent& event);
+	void OnClickArenaBrushButton(wxCommandEvent& event);
 	// ----
 	void OnClickLockDoorCheckbox(wxCommandEvent& event);
 
@@ -270,9 +269,8 @@ public:
 	BrushButton* archwayDoorButton;
 	// ----
 	BrushButton* pzBrushButton;
-	BrushButton* nopvpBrushButton;
 	BrushButton* nologBrushButton;
-	BrushButton* pvpzoneBrushButton;
+	BrushButton* arenaBrushButton;
 
 	wxCheckBox* lockDoorCheckbox;
 

@@ -367,9 +367,9 @@ bool GraphicManager::loadEditorSprites() {
 		loadPNGFile(protection_zone_small_png),
 		loadPNGFile(protection_zone_png)
 	);
-	sprite_space[EDITOR_SPRITE_PVPZ_TOOL] = newd EditorSprite(
-		loadPNGFile(pvp_zone_small_png),
-		loadPNGFile(pvp_zone_png)
+	sprite_space[EDITOR_SPRITE_ARENA_TOOL] = newd EditorSprite(
+		loadPNGFile(arena_zone_small_png),
+		loadPNGFile(arena_zone_png)
 	);
 	sprite_space[EDITOR_SPRITE_ZONE_TOOL] = newd EditorSprite(
 		loadPNGFile(zone_brush_small_png),
@@ -378,10 +378,6 @@ bool GraphicManager::loadEditorSprites() {
 	sprite_space[EDITOR_SPRITE_NOLOG_TOOL] = newd EditorSprite(
 		loadPNGFile(no_logout_small_png),
 		loadPNGFile(no_logout_png)
-	);
-	sprite_space[EDITOR_SPRITE_NOPVP_TOOL] = newd EditorSprite(
-		loadPNGFile(no_pvp_small_png),
-		loadPNGFile(no_pvp_png)
 	);
 
 	sprite_space[EDITOR_SPRITE_DOOR_NORMAL] = newd EditorSprite(
