@@ -27,9 +27,9 @@ enum {
 	TILESTATE_NONE = 0x0000,
 	TILESTATE_PROTECTIONZONE = 0x0001,
 	TILESTATE_DEPRECATED = 0x0002, // Reserved
-	TILESTATE_NOPVP = 0x0004,
+	TILESTATE_RESERVED_ZONE = 0x0004,
 	TILESTATE_NOLOGOUT = 0x0008,
-	TILESTATE_PVPZONE = 0x0010,
+	TILESTATE_ARENAZONE = 0x0010,
 	TILESTATE_REFRESH = 0x0020,
 	TILESTATE_ZONE_BRUSH = 0x0040,
 	// Internal
@@ -236,7 +236,7 @@ public: // Functions
 	bool hasHouseExit(uint32_t exit) const;
 	void setHouse(House* house);
 
-	// Mapflags (PZ, PVPZONE etc.)
+	// Map flags (protection, arena, no logout, etc.)
 	void addZoneId(uint16_t _zoneId);
 	void removeZoneId(uint16_t _zoneId);
 	void clearZoneId();

@@ -81,9 +81,8 @@ void Brushes::init() {
 	addBrush(g_gui.waypoint_brush = newd WaypointBrush());
 
 	addBrush(g_gui.pz_brush = newd FlagBrush(TILESTATE_PROTECTIONZONE));
-	addBrush(g_gui.rook_brush = newd FlagBrush(TILESTATE_NOPVP));
 	addBrush(g_gui.nolog_brush = newd FlagBrush(TILESTATE_NOLOGOUT));
-	addBrush(g_gui.pvp_brush = newd FlagBrush(TILESTATE_PVPZONE));
+	addBrush(g_gui.arena_brush = newd FlagBrush(TILESTATE_ARENAZONE));
 	addBrush(g_gui.zone_brush = newd FlagBrush(TILESTATE_ZONE_BRUSH));
 
 	GroundBrush::init();
@@ -251,12 +250,10 @@ std::string FlagBrush::getName() const {
 	switch (flag) {
 		case TILESTATE_PROTECTIONZONE:
 			return "PZ brush (0x01)";
-		case TILESTATE_NOPVP:
-			return "No combat zone brush (0x04)";
 		case TILESTATE_NOLOGOUT:
 			return "No logout zone brush (0x08)";
-		case TILESTATE_PVPZONE:
-			return "PVP Zone brush (0x10)";
+		case TILESTATE_ARENAZONE:
+			return "Arena zone brush (0x10)";
 		case TILESTATE_ZONE_BRUSH:
 			return "Zone brush (0x40)";
 	}
@@ -267,12 +264,10 @@ int FlagBrush::getLookID() const {
 	switch (flag) {
 		case TILESTATE_PROTECTIONZONE:
 			return EDITOR_SPRITE_PZ_TOOL;
-		case TILESTATE_NOPVP:
-			return EDITOR_SPRITE_NOPVP_TOOL;
 		case TILESTATE_NOLOGOUT:
 			return EDITOR_SPRITE_NOLOG_TOOL;
-		case TILESTATE_PVPZONE:
-			return EDITOR_SPRITE_PVPZ_TOOL;
+		case TILESTATE_ARENAZONE:
+			return EDITOR_SPRITE_ARENA_TOOL;
 		case TILESTATE_ZONE_BRUSH:
 			return EDITOR_SPRITE_ZONE_TOOL;
 	}

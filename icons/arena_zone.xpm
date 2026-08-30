@@ -1,5 +1,5 @@
 /* XPM */
-static const char *pvp_zone_xpm[] = {
+static const char *arena_zone_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 109 2 ",
 "   c #321D16",
