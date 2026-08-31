@@ -2,6 +2,14 @@
 <creatures>
     <creature name="Missigno" type="pokemon" looktype="500"/>
     <creature name="Bulbasaur" type="pokemon" looktype="501"/>
+    <creature name="Ivysaur" type="pokemon" looktype="500"/>
     <creature name="Charmander" type="pokemon" looktype="504"/>
+    <creature name="Charmeleon" type="pokemon" looktype="500"/>
     <creature name="Squirtle" type="pokemon" looktype="507"/>
+    <creature name="Wartortle" type="pokemon" looktype="500"/>
+    <creature name="Pikachu" type="pokemon" looktype="525"/>
+    <creature name="Sandshrew" type="pokemon" looktype="527"/>
+    <creature name="Substitute" type="pokemon" looktype="500"/>
+    <creature name="Joy" type="npc" looktype="139" lookhead="20" lookbody="39" looklegs="45" lookfeet="7"/>
+    <creature name="Mark" type="npc" looktype="128" lookhead="95" lookbody="86" looklegs="38" lookfeet="114"/>
 </creatures>
